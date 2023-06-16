@@ -9,6 +9,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GymKhana">
         <activity
+            android:name=".AdminDetails"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

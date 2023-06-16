@@ -107,11 +107,13 @@
         app:layout_constraintStart_toEndOf="@+id/userName"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/userIcon"
+            android:scaleType="fitCenter"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            app:srcCompat="@drawable/samrat" />
+            app:srcCompat="@drawable/samrat"
+            android:contentDescription="click for details"/>
     </androidx.cardview.widget.CardView>
 
     <ImageView
