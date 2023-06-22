@@ -17,8 +17,7 @@
         android:gravity="center"
         android:textSize="20sp"
         android:textStyle="bold"
-        android:textColor="@color/primary"
-        tools:text="June 2023" />
+        android:textColor="@color/primary"/>
 
     <!-- Previous and Next Month Buttons -->
     <LinearLayout
@@ -53,5 +52,20 @@
         android:layout_marginTop="16dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="7" />
+
+    <TextView
+        android:id="@+id/totalDaysTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Days: 0"
+        />
+
+    <TextView
+        android:id="@+id/streakLengthTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Streak Length: 0"
+        />
+
 
 </LinearLayout>
