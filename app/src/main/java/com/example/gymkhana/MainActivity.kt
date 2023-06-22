@@ -16,17 +16,15 @@ class MainActivity : AppCompatActivity() {
         val imagebtn : ImageButton= findViewById(R.id.userIcon)
         val attendanceButton: Button = findViewById(R.id.attendance)
 
-        imagebtn.setOnClickListener(){
+        imagebtn.setOnClickListener {
             var i = Intent(this,UserDetails::class.java)
             startActivity(i)
         }
 
 
         attendanceButton.setOnClickListener {
-            val attendanceFragment = AttendanceFragment()
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.attendance, attendanceFragment)
-                .commit()
+            val intent = Intent(this, AttendanceActivity::class.java)
+            startActivity(intent)
         }
 
 
