@@ -65,7 +65,7 @@ class CalendarAdapter(
     }
 
     private fun updateTotalDaysAndStreak() {
-        val totalDays = highlightedDates.size
+        val totalDays = highlightedDates.count{it.value==1}
         val streakLength = calculateStreakLength()
         (context as AttendanceActivity).updateTotalDays(totalDays)
         (context as AttendanceActivity).updateStreakLength(streakLength)
