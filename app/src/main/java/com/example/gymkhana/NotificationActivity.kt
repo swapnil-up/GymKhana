@@ -1,6 +1,8 @@
 package com.example.gymkhana
 
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +15,8 @@ class NotificationActivity : AppCompatActivity() {
 
     private lateinit var notificationRecyclerView: RecyclerView
     private lateinit var notificationAdapter: NotificationAdapter
+    private val notifications: MutableList<Notification> = mutableListOf()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,23 +26,21 @@ class NotificationActivity : AppCompatActivity() {
         notificationRecyclerView = findViewById(R.id.notificationRecyclerView)
         notificationRecyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Create sample notification data
+        /*// Create sample notification data
         val notificationList = listOf(
             Notification("Notification 1", "This is the first notification"),
             Notification("Notification 2", "This is the second notification"),
             Notification("Notification 3", "This is the third notification")
-        )
+        )*/
 
         // Create and set the adapter for RecyclerView
-        notificationAdapter = NotificationAdapter(notificationList)
+        notificationAdapter = NotificationAdapter(notifications)
         notificationRecyclerView.adapter = notificationAdapter
 
         // Get a reference to the Firebase Realtime Database
-        val database = FirebaseDatabase.getInstance().reference
-
+        val database = FirebaseDatabase.getInstance("https://gymkhana-5560f-default-rtdb.asia-southeast1.firebasedatabase.app/")
         // Get a reference to the "notifications" node in the database
-        val notificationsRef = database.child("notifications")
-
+        val notificationsRef = database.reference.child("Notification")
         // Set up a ValueEventListener to listen for changes in the notifications node
         val valueEventListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -52,13 +54,18 @@ class NotificationActivity : AppCompatActivity() {
                     }
                 }
 
-                // Update the RecyclerView with the retrieved notifications
-                val notificationAdapter = NotificationAdapter(notificationList)
-                notificationRecyclerView.adapter = notificationAdapter
+                // Update the existing adapter's data list and notify it of the data change
+                notifications.clear()
+                notifications.addAll(notificationList)
+                notificationAdapter.notifyDataSetChanged()
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                // Handle any errors during data retrieval
+                // Log the error message
+                Log.e("NotificationActivity", "Failed to retrieve notifications: ${databaseError.message}")
+
+                // Show a toast or display an error message to the user
+                Toast.makeText(applicationContext, "Failed to retrieve notifications", Toast.LENGTH_SHORT).show()
             }
         }
 
