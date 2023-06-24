@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
         val imagebtn : ImageButton= findViewById(R.id.userIcon)
         val attendanceButton: Button = findViewById(R.id.attendance)
         val notificationbtn: Button=findViewById(R.id.notificationbtn)
+        val storeButton:Button=findViewById(R.id.Store)
 
         imagebtn.setOnClickListener {
             var i = Intent(this,UserDetails::class.java)
@@ -33,6 +34,11 @@ class MainActivity : AppCompatActivity() {
 
         notificationbtn.setOnClickListener {
             val intent = Intent(this, NotificationActivity::class.java)
+            startActivity(intent)
+        }
+
+        storeButton.setOnClickListener {
+            val intent = Intent(this, StoreActivity::class.java)
             startActivity(intent)
         }
 
