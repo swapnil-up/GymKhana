@@ -2,4 +2,14 @@
     <string name="app_name">GymKhana</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="ready_in_minutes">Ready in %1$d minutes</string>
+    <string name="servings">Servings: %1$d</string>
+    <string name="carbohydrates">Carbohydrates: %.2f g</string>
+
+    <string name="calories">Calories: %.2f</string>
+    <string name="carbs">Carbs: %.2f g</string>
+    <string name="fat">Fat: %.2f g</string>
+    <string name="protein">Protein: %.2f g</string>
+
 </resources>

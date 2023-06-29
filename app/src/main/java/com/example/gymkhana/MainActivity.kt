@@ -21,6 +21,8 @@ class MainActivity : AppCompatActivity() {
         val notificationbtn: Button=findViewById(R.id.notificationbtn)
         val storeButton:Button=findViewById(R.id.Store)
         val foodButton :Button= findViewById(R.id.FoodSearch)
+        val mealPlanButton :Button= findViewById(R.id.mealPlan)
+
 
 
         imagebtn.setOnClickListener {
@@ -49,6 +51,10 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        mealPlanButton.setOnClickListener {
+            val intent = Intent(this, MealPlanActivity::class.java)
+            startActivity(intent)
+        }
 
         FirebaseApp.initializeApp(this)
 
