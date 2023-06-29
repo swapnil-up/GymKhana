@@ -20,6 +20,8 @@ class MainActivity : AppCompatActivity() {
         val attendanceButton: Button = findViewById(R.id.attendance)
         val notificationbtn: Button=findViewById(R.id.notificationbtn)
         val storeButton:Button=findViewById(R.id.Store)
+        val foodButton :Button= findViewById(R.id.FoodSearch)
+
 
         imagebtn.setOnClickListener {
             var i = Intent(this,UserDetails::class.java)
@@ -39,6 +41,11 @@ class MainActivity : AppCompatActivity() {
 
         storeButton.setOnClickListener {
             val intent = Intent(this, StoreActivity::class.java)
+            startActivity(intent)
+        }
+
+        foodButton.setOnClickListener {
+            val intent = Intent(this, FoodSearchActivity::class.java)
             startActivity(intent)
         }
 
