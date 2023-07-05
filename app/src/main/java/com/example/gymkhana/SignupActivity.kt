@@ -17,16 +17,17 @@ class SignupActivity : AppCompatActivity() {
         firebaseAuth = FirebaseAuth.getInstance()
         binding.signupButton.setOnClickListener{
             val email = binding.signupEmail.text.toString()
-            val password = binding.signupPassword.text.toString()
+            val userName = binding.userName.text.toString()
+            val password = binding.signupPassword.toString()
             val confirmPassword = binding.signupConfirm.text.toString()
-            if (email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty()){
+            if (email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty() && userName.isNotEmpty()){
                 if (password == confirmPassword){
                     firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener{
                         if (it.isSuccessful){
                             val intent = Intent(this, LoginActivity::class.java)
                             startActivity(intent)
                         } else {
-                            Toast.makeText(this, it.exception.toString(), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Insert valid email or password", Toast.LENGTH_SHORT).show()
                         }
                     }
                 } else {
