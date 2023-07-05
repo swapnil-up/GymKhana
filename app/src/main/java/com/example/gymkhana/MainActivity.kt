@@ -7,6 +7,8 @@ import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 
 class MainActivity : AppCompatActivity() {
@@ -22,11 +24,18 @@ class MainActivity : AppCompatActivity() {
         val storeButton:Button=findViewById(R.id.Store)
         val foodButton :Button= findViewById(R.id.FoodSearch)
         val mealPlanButton :Button= findViewById(R.id.mealPlan)
+        val imageButton : ImageButton= findViewById(R.id.logoutbutton)
 
 
 
         imagebtn.setOnClickListener {
             var i = Intent(this,UserDetails::class.java)
+            startActivity(i)
+        }
+
+        imageButton.setOnClickListener {
+            Firebase.auth.signOut()
+            var i = Intent(this,LoginActivity::class.java)
             startActivity(i)
         }
 
