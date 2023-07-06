@@ -11,6 +11,10 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
+import android.content.pm.PackageManager
+import android.net.Uri
+import com.google.zxing.integration.android.IntentIntegrator
+import com.google.zxing.integration.android.IntentResult
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,7 +30,11 @@ class MainActivity : AppCompatActivity() {
         val foodButton :Button= findViewById(R.id.FoodSearch)
         val mealPlanButton :Button= findViewById(R.id.mealPlan)
         val imageButton : ImageButton= findViewById(R.id.logoutbutton)
+        val scanButton : ImageButton= findViewById(R.id.scanButton)
 
+        scanButton.setOnClickListener {
+            openQRScanner()
+        }
 
 
         imagebtn.setOnClickListener {
@@ -81,5 +89,27 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
+    private fun openQRScanner() {
+        val integrator = IntentIntegrator(this)
+        integrator.setOrientationLocked(false)
+        integrator.setBeepEnabled(false)
+        integrator.setPrompt("Scan a QR Code")
+        integrator.initiateScan()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        val result: IntentResult? = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        if (result != null && result.contents != null) {
+            // QR code scanned successfully, handle the result
+            val scannedData: String = result.contents
+            Toast.makeText(this, "Scanned QR Code: $scannedData", Toast.LENGTH_LONG).show()
+        } else {
+            // QR code scanning canceled or failed
+            Toast.makeText(this, "Scan canceled or failed", Toast.LENGTH_LONG).show()
+        }
+    }
 }
 

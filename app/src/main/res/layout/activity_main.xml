@@ -114,21 +114,22 @@
             app:srcCompat="@drawable/samrat" />
     </androidx.cardview.widget.CardView>
 
-    <ImageView
-        android:id="@+id/imageView8"
-        android:layout_width="36dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="12dp"
+    <ImageButton
+        android:id="@+id/scanButton"
+        android:layout_width="70dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="4dp"
+        android:scaleType="fitCenter"
         app:layout_constraintBottom_toBottomOf="@+id/logoutbutton"
         app:layout_constraintStart_toEndOf="@+id/logoutbutton"
         app:layout_constraintTop_toTopOf="@+id/logoutbutton"
-        app:layout_constraintVertical_bias="0.058"
+        app:layout_constraintVertical_bias="0.666"
         app:srcCompat="@drawable/barcodescanner" />
 
     <ImageButton
         android:id="@+id/logoutbutton"
-        android:layout_width="65dp"
-        android:layout_height="51dp"
+        android:layout_width="70dp"
+        android:layout_height="60dp"
         android:layout_marginTop="15dp"
         android:scaleType="fitCenter"
         app:layout_constraintStart_toStartOf="@+id/userName"
