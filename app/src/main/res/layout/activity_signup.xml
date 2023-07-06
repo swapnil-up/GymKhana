@@ -30,10 +30,13 @@
             android:layout_marginStart="145dp"
             android:layout_marginTop="62dp"
             android:text="Sign Up"
+            android:shadowColor="@color/black"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="#FFFFFF"
             android:textIsSelectable="true"
             android:textSize="34sp"
             android:textStyle="bold"
+            app:autoSizeTextType="uniform"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -106,7 +109,7 @@
             android:layout_height="51dp"
             android:layout_marginStart="28dp"
             android:layout_marginTop="24dp"
-            android:background="@color/BurntSienna"
+            android:background="@drawable/buttoncolor"
             android:text="Sign Up"
             android:textSize="18sp"
             app:cornerRadius="30dp"

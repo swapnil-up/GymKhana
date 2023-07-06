@@ -11,5 +11,6 @@
     <string name="carbs">Carbs: %.2f g</string>
     <string name="fat">Fat: %.2f g</string>
     <string name="protein">Protein: %.2f g</string>
+    <string name="email">Email</string>
 
 </resources>

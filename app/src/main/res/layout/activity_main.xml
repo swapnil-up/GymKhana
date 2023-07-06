@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="420dp"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@color/PastelBlue"
+    >
 
     <Button
         android:id="@+id/attendance"
@@ -46,7 +48,7 @@
         android:layout_width="85dp"
         android:layout_height="85dp"
         android:layout_marginTop="20dp"
-        android:background="@color/background"
+        android:background="@color/BurntSienna"
         app:layout_constraintStart_toStartOf="@+id/attendance"
         app:layout_constraintTop_toBottomOf="@+id/attendance"
         app:srcCompat="@drawable/cashlesspayment"
@@ -67,7 +69,7 @@
         android:layout_width="85dp"
         android:layout_height="85dp"
         android:layout_marginStart="88dp"
-        android:background="@color/background"
+        android:background="@color/BurntSienna"
         app:layout_constraintBottom_toBottomOf="@+id/Store"
         app:layout_constraintStart_toEndOf="@+id/Store"
         app:layout_constraintTop_toTopOf="@+id/Store"
