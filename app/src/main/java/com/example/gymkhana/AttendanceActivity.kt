@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import java.text.SimpleDateFormat
 import java.util.*
 
+
+
 class AttendanceActivity : AppCompatActivity() {
 
     private lateinit var calendarRecyclerView: RecyclerView
