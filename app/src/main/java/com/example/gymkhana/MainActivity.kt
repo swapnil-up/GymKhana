@@ -92,7 +92,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun openQRScanner() {
         val integrator = IntentIntegrator(this)
-        integrator.setOrientationLocked(false)
+        integrator.setOrientationLocked(true)
         integrator.setBeepEnabled(false)
         integrator.setPrompt("Scan a QR Code")
         integrator.initiateScan()
