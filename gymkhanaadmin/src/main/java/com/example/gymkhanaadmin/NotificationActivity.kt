@@ -1,6 +1,7 @@
 package com.example.gymkhanaadmin
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class NotificationActivity : AppCompatActivity() {
@@ -12,7 +13,11 @@ class NotificationActivity : AppCompatActivity() {
         val title = intent.getStringExtra("title")
         val message = intent.getStringExtra("message")
 
+        // Display the notification title and message
+        Toast.makeText(this, "Title: $title\nMessage: $message", Toast.LENGTH_SHORT).show()
+
         // Add your desired logic here based on the notification data
+        // For example, you can start a new activity, update UI components, etc.
 
         // Finish the activity
         finish()
