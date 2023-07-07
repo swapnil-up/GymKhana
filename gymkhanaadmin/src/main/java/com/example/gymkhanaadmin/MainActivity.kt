@@ -36,12 +36,12 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, AttendanceActivity::class.java)
             startActivity(intent)
         }
-
+*/
         notificationbtn.setOnClickListener {
-            val intent = Intent(this, NotificationActivity::class.java)
+            val intent = Intent(this, PushNotification::class.java)
             startActivity(intent)
         }
-
+/*
         storeButton.setOnClickListener {
             val intent = Intent(this, StoreActivity::class.java)
             startActivity(intent)
