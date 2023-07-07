@@ -126,17 +126,12 @@ class PushNotification : AppCompatActivity() {
 
         val json = JSONObject()
         val notification = JSONObject()
-        val data = JSONObject()
-
         try {
-            data.put("title", title)
-            data.put("message", message)
 
             notification.put("title", title)
             notification.put("body", message)
 
             json.put("notification", notification)
-            json.put("data", data)
             json.put("to", fcmToken)
             json.put("channel_id", FCM_CHANNEL_ID)
         } catch (e: JSONException) {
