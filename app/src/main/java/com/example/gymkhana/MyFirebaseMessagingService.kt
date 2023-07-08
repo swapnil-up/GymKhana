@@ -2,6 +2,7 @@ package com.example.gymkhana
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -10,8 +11,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.Constants.TAG
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
@@ -26,6 +25,9 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel()
+        }
         // Handle the incoming notification here
         // You can access the notification title, body, and other data from the `remoteMessage` parameter
         Log.d(
@@ -53,6 +55,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setContentText(text)
             .setSmallIcon(R.drawable.ic_launcher_background)
             .setAutoCancel(true)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
             .build()
 
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
@@ -62,51 +65,54 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         super.onMessageReceived(remoteMessage)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createNotificationChannel() {
+        val channelId = "HEADS_UP_NOTIFICATION"
+        val channelName = "Heads Up Notification"
+        val importance = NotificationManager.IMPORTANCE_HIGH
+
+        val channel = NotificationChannel(channelId, channelName, importance)
+        channel.enableVibration(true)
+        channel.setShowBadge(true)
+
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
+
     private fun saveNotificationToDatabase(title: String?, message: String?) {
         Log.d("myNotificationReceived", "Title: $title")
         Log.d("myNotificationReceived", "Message: $message")
 
-        // Replace the placeholder with your Firebase Realtime Database URL
-        val databaseUrl = "https://gymkhana-5560f-default-rtdb.asia-southeast1.firebasedatabase.app"
+        val databaseUrl = "https://gymkhana-5560f-default-rtdb.asia-southeast1.firebasedatabase.app/"
 
-        // Get a reference to the Firebase Realtime Database
-        val database = FirebaseDatabase.getInstance(databaseUrl).getReference("Notification")
+        val database = FirebaseDatabase.getInstance(databaseUrl).reference.child("Notification")
 
-        // Generate a unique key for the notification entry
         val notificationKey = database.push().key
 
-        // Create a notification object
         val notification = Notification(title ?: "", message ?: "")
 
-        // Save the notification to the Firebase Realtime Database
         if (notificationKey != null) {
             database.child(notificationKey).setValue(notification)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        // Notification saved successfully
                         Log.d("myNotificationReceived", "Notification saved to Firebase Realtime Database")
 
-                        // Read the saved notification from the database
                         val myRef = database.child(notificationKey)
-                        myRef.addValueEventListener(object : ValueEventListener {
+                        myRef.addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                                // This method is called once with the initial value and again
-                                // whenever data at this location is updated.
                                 val value = dataSnapshot.getValue(Notification::class.java)
                                 Log.d(TAG, "Value is: $value")
                             }
 
-                            override fun onCancelled(error: DatabaseError) {
-                                // Failed to read value
-                                Log.w(
+                            override fun onCancelled(databaseError: DatabaseError) {
+                                Log.e(
                                     "myNotificationReceivedFailedRead",
                                     "Failed to read value.",
-                                    error.toException()
+                                    databaseError.toException()
                                 )
                             }
                         })
                     } else {
-                        // Failed to save notification
                         Log.e(
                             "myNotificationReceivedFailedSave",
                             "Failed to save notification to Firebase Realtime Database",
