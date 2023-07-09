@@ -26,6 +26,7 @@ class SignupActivity : AppCompatActivity() {
                         if (it.isSuccessful){
                             val intent = Intent(this, LoginActivity::class.java)
                             startActivity(intent)
+
                         } else {
                             Toast.makeText(this, "Insert valid email or password", Toast.LENGTH_SHORT).show()
                         }
@@ -40,6 +41,9 @@ class SignupActivity : AppCompatActivity() {
         binding.loginRedirectText.setOnClickListener {
             val loginIntent = Intent(this, LoginActivity::class.java)
             startActivity(loginIntent)
+            // Close the LoginActivity
+            finish()
+
         }
     }
 }
