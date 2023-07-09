@@ -30,7 +30,7 @@ class PushNotification : AppCompatActivity() {
     private lateinit var editTextTitle: EditText
     private lateinit var editTextMessage: EditText
     private lateinit var notificationManager: NotificationManager
-    private val FCM_CHANNEL_ID = "my_channel_id"
+    private val FCM_CHANNEL_ID = "heads_up_notification"
     companion object {
         const val FCM_CHANNEL_ID = "FCM_CHANNEL_ID"
     }
@@ -125,18 +125,11 @@ class PushNotification : AppCompatActivity() {
         Log.d("PushNotificationLog", "Notification Message: $message")
 
         val json = JSONObject()
-        val notification = JSONObject()
         val data = JSONObject()
-
         try {
-            data.put("title", title)
-            data.put("message", message)
-
-            notification.put("title", title)
-            notification.put("body", message)
-
-            json.put("notification", notification)
-            json.put("data", data)
+            data.put("title", title) // Add title to the data payload
+            data.put("message", message) // Add message to the data payload
+            json.put("data", data) // Include the data payload
             json.put("to", fcmToken)
             json.put("channel_id", FCM_CHANNEL_ID)
         } catch (e: JSONException) {
@@ -155,6 +148,7 @@ class PushNotification : AppCompatActivity() {
             },
             Response.ErrorListener { error ->
                 // Failed to send notification
+                Log.e("PushNotificationLogFail", "Error sending notification: ${error.message}")
                 showErrorMessage()
             }) {
             override fun getBodyContentType(): String {
@@ -163,7 +157,7 @@ class PushNotification : AppCompatActivity() {
 
             override fun getHeaders(): MutableMap<String, String> {
                 val headers = HashMap<String, String>()
-                headers["Authorization"] = "key=MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCcGmAIrefJ0fQB/arOH4JwvQ3wKhLjYaQhr+HxoJlusT6fD2405e6gaiJAAaPlD4Yd4ulSTU2mIZsg6+HSVXaDGFBWPDyVUkVi43/4MzBOKTynMQ5f774U/VI8xMC3WV10HV/+aBhdYtQVr3SomumuJ3oxslBvm4lE/7L9Yyxv5U8e9HXNKBPhPn8jwxbxBrhhi061CT+EgTI9XSznb6M1msybuJ9jgJEOaZBkmYlMA4DTxOKVfgi4cE3tnM9mDxfghISnMLc1Ov1x/SQMSRp8yXArWzRPs2Sg/VelRJOqkCAbUK0xXGknZYUU0WcLJyXDgjeJxrBO7Kt2WdrAKkYNAgMBAAECggEACOiIanZiL+ZHYoWzZafurbhcP0RnZ4p+7102K6/akbKTvEgJJgOpJoZoBfcR/1Rvdu0oG4ZF1CE+1RYhAPvXk4ujqggt/OeBBi+tceCZ9RvtVi06gMcRteju9IDV7qCu8J1siPwvx8SIDeTBZ43PoByooIVoibX6k3F0KXmrY4c/ p+jZCjxlh0oAxtIJmoeW4cI1NSe26gDxwLvMGSFnDfSn8HqQe+bsU19/3Gdkr1Wn 1blP7bSPHYI8vxdINil6nZjVIBcPlx/T0Ywqx7OMDgjFfHsOVx451uIcsSm4kfod sV/GmIACw7oSsQ1IEPN//IGavXZO+tDPTllQgjD/kQKBgQDXIltIGv5djGv7z4Z/ kpu4s+J90EaExGkB4jRu2H95GKbuk+F67VRK2LZvaQstlNnnuplJGiKIHu+ii3FUTBvJ6cHEhlQ+53FZa7thjTxoYDBYH4IQfn7kZadofVFq4GuXKdv5nUka8/8Vo4cMANkMIcTpMGGv+kQbOtyGFdvZuwKBgQC5wWx8EIZFjG9k4ZjU7yzAELMEaTcWoOQvJWONQk8oybz6bYV8LnqQhntTpEQVteg3q0ydp/Pzc+ZeFPULBQaw3igkjHNalY/xJBoJay1LVGVhEHczjHF99ynhyiVrV8kcAch8QKmrlVyv2D1pH/b39FE1OUnde0c4ZrT9W5+e1wKBgQDIvI8N/doAsgkEIkSufr78niSlHpTeR2Jv1oD0OODgvobssGHBUPfJCuNXm11Jv81/ctaapl84Qh15vsEVVhrL0WjzFiA/vbc/J83lHWMTRUV2xJeZCl8egFevoNc6cYMSvoU6KW/QTYFj0H0vTw83Sb8xkupjyJKKEec42eaVBwKBgQCaFCgBTM+jdtabbkmQLogHFJL5ULDiMzizJqdJ77urkJMRgrEbjY4avYIkoffbrlTdgFh/2WWQBg4K8gVES7n+EXhowJuagr6v/gsezuj2OB4Tgk3t00v8eX0jDcM2I83sTkpXTmeurKkCLzLZNSttBxopNMjhTzWHQiJUmaBwZwKBgH9dCUMuk1GLYljQnw3UMTf5+Byn4L/EPxjw+IL5LjjB5S/VavaFui2DtYVTAoGxGCaomhMJSji0SF6xZ5kfqlTlVVTdMZ/6mBcS1DtODUt/C6tXILdPHpZgMIAs5wJE0/CWeA3dokUkgWa9FVRF 4RWsziew3nhDDoI56GT2RyUI"
+                headers["Authorization"] = "key=AAAAR2SHxnQ:APA91bES_MqK4Iau19kB9d_ZKvHxUFFnieUVu6ky9jtdTLrNshY_ZVUpcfLHsH-dkRZ9OcluVF_fd1YLMrnARUYZ2UvwcCTsEhM3S1ngGuwMTPD52NL_CPmfdHBLMXigAFHbOSgJwsb7"
                 return headers
             }
 
