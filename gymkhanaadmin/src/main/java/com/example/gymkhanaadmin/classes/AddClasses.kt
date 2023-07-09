@@ -16,13 +16,13 @@ import com.example.gymkhanaadmin.R
 class AddClasses : AppCompatActivity() {
 
     private val PICK_IMAGE_REQUEST = 1
+    val addClassImg: ImageView = findViewById(R.id.addClassImg)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_classes)
 
 
-        val addClassImg: ImageView = findViewById(R.id.addClassImg)
         val addClassName: EditText = findViewById(R.id.addClassName)
         val addClassDescription: EditText = findViewById(R.id.addClassDescription)
         val addClassBtn: Button = findViewById(R.id.addClassBtn)
