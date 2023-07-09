@@ -48,10 +48,13 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         for ((key, value) in data) {
             if (value.isNotBlank()) {
                 filteredData[key] = value
+            }else {
+                Log.d("FilterEmptyNodes", "Filtered out empty node - Key: $key, Value: $value")
             }
         }
         return filteredData
     }
+
 
     private fun handleDataPayload(data: Map<String, String>) {
         // Retrieve the values from the data payload
@@ -112,6 +115,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun saveNotificationToDatabase(title: String?, message: String?) {
+        if (title.isNullOrEmpty() || message.isNullOrEmpty()) {
+            Log.d("SaveNotification", "Skipping empty notification")
+            return
+        }
         Log.d("myNotificationReceived", "Title: $title")
         Log.d("myNotificationReceived", "Message: $message")
 
