@@ -77,6 +77,11 @@
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="OPEN_ACTIVITY_FROM_NOTIFICATION" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
         </service>
     </application>
 

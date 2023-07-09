@@ -30,7 +30,7 @@ class PushNotification : AppCompatActivity() {
     private lateinit var editTextTitle: EditText
     private lateinit var editTextMessage: EditText
     private lateinit var notificationManager: NotificationManager
-    private val FCM_CHANNEL_ID = "my_channel_id"
+    private val FCM_CHANNEL_ID = "heads_up_notification"
     companion object {
         const val FCM_CHANNEL_ID = "FCM_CHANNEL_ID"
     }
@@ -125,13 +125,11 @@ class PushNotification : AppCompatActivity() {
         Log.d("PushNotificationLog", "Notification Message: $message")
 
         val json = JSONObject()
-        val notification = JSONObject()
+        val data = JSONObject()
         try {
-
-            notification.put("title", title)
-            notification.put("body", message)
-
-            json.put("notification", notification)
+            data.put("title", title) // Add title to the data payload
+            data.put("message", message) // Add message to the data payload
+            json.put("data", data) // Include the data payload
             json.put("to", fcmToken)
             json.put("channel_id", FCM_CHANNEL_ID)
         } catch (e: JSONException) {
