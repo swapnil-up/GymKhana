@@ -41,7 +41,7 @@ class SignupActivity : AppCompatActivity() {
         binding.loginRedirectText.setOnClickListener {
             val loginIntent = Intent(this, LoginActivity::class.java)
             startActivity(loginIntent)
-            // Close the LoginActivity
+            // Close the SignupActivity
             finish()
 
         }
