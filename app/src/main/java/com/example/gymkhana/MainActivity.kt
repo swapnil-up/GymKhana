@@ -58,7 +58,18 @@ class MainActivity : AppCompatActivity() {
 
         notificationbtn.setOnClickListener {
             val intent = Intent(this, NotificationActivity::class.java)
-            startActivity(intent)
+
+            // Retrieve the data from the intent extras
+            val data = intent.getSerializableExtra("data") as? HashMap<String, String>
+
+            // Check if the intent extras contain any data payload
+            if (data != null) {
+                // Access the data values
+                val value1 = data["title"]
+                val value2 = data["message"]
+            }
+
+                startActivity(intent)
         }
 
         storeButton.setOnClickListener {

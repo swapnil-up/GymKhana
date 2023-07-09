@@ -17,7 +17,6 @@ class NotificationActivity : AppCompatActivity() {
     private lateinit var notificationAdapter: NotificationAdapter
     private val notifications: MutableList<Notification> = mutableListOf()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notification)
@@ -26,21 +25,14 @@ class NotificationActivity : AppCompatActivity() {
         notificationRecyclerView = findViewById(R.id.notificationRecyclerView)
         notificationRecyclerView.layoutManager = LinearLayoutManager(this)
 
-        /*// Create sample notification data
-        val notificationList = listOf(
-            Notification("Notification 1", "This is the first notification"),
-            Notification("Notification 2", "This is the second notification"),
-            Notification("Notification 3", "This is the third notification")
-        )*/
-
         // Create and set the adapter for RecyclerView
         notificationAdapter = NotificationAdapter(notifications)
         notificationRecyclerView.adapter = notificationAdapter
 
         // Get a reference to the Firebase Realtime Database
-        val database = FirebaseDatabase.getInstance("https://gymkhana-5560f-default-rtdb.asia-southeast1.firebasedatabase.app/")
-        // Get a reference to the "notifications" node in the database
-        val notificationsRef = database.reference.child("Notification")
+        val databaseUrl = "https://gymkhana-5560f-default-rtdb.asia-southeast1.firebasedatabase.app/"
+        val database = FirebaseDatabase.getInstance(databaseUrl).reference.child("Notification")
+
         // Set up a ValueEventListener to listen for changes in the notifications node
         val valueEventListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -70,9 +62,6 @@ class NotificationActivity : AppCompatActivity() {
         }
 
         // Start listening for changes in the notifications node
-        notificationsRef.addValueEventListener(valueEventListener)
-
-
-
+        database.addValueEventListener(valueEventListener)
     }
 }
