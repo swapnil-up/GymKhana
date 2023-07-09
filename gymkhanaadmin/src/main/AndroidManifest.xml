@@ -3,7 +3,7 @@
     package="com.example.gymkhanaadmin">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <application
         android:allowBackup="true"
@@ -13,17 +13,34 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GymKhana">
         <activity
+            android:name=".classes.AddClasses"
+            android:exported="false" />
+        <activity
+            android:name=".classes.UpdateClasses"
+            android:exported="false" />
+        <activity
+            android:name=".classes.AddClass"
+            android:exported="false" />
+        <activity
+            android:name=".classes.UpdateClass"
+            android:exported="false" />
+        <activity
+            android:name=".classes.MainActivity"
+            android:exported="false"
+            android:label="@string/title_activity_main"
+            android:theme="@style/Theme.GymKhana" />
+        <activity
             android:name=".NotificationActivity"
             android:exported="false">
             <intent-filter>
                 <action android:name="OPEN_NOTIFICATION" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
             android:name=".PushNotification"
             android:exported="false" />
-
         <activity
             android:name=".AdminDetails"
             android:exported="false" />
