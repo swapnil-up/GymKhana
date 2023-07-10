@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">GymKhanaAdmin</string>
     <string name="default_notification_channel_id">default_channel</string>
+    <string name="title_activity_main">MainActivity</string>
 </resources>
