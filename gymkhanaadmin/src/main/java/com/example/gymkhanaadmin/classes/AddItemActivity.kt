@@ -61,54 +61,11 @@ class AddItemActivity : AppCompatActivity() {
             startActivityForResult(cameraIntent, REQUEST_IMAGE_CAPTURE)
         }
 
-        val addItemButton = findViewById<Button>(R.id.addItemButton)
-        addItemButton.setOnClickListener {
-            val itemName = itemNameEditText.text.toString()
-            val price = priceEditText.text.toString().toDoubleOrNull()
-
-            if (itemName.isNotEmpty() && price != null) {
-                val item = StoreItem("", itemName, price)
-                uploadImageToStorage(imageUri, itemName, item.price)
-            } else {
-                Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
-            }
-        }
-
         // Get a reference to the Firebase Realtime Database
         val database = FirebaseDatabase.getInstance("https://gymkhana-5560f-default-rtdb.asia-southeast1.firebasedatabase.app")
         // Get a reference to the "items" node in the database
         databaseRef = database.reference.child("items")
     }
-
-    private fun uploadImageToStorage(imageUri: Uri, itemName: String, price: Double) {
-        val storageRef = storageRef.child("item_images/${imageUri.lastPathSegment}")
-        val uploadTask = storageRef.putFile(imageUri)
-
-        uploadTask.addOnSuccessListener { taskSnapshot ->
-            // Image uploaded successfully, get the download URL
-            storageRef.downloadUrl.addOnSuccessListener { uri ->
-                val item = StoreItem(uri.toString(), itemName, price)
-                addItemToDatabase(item)
-                // Set the download URL in the EditText
-                imageUrlEditText.setText(uri.toString())
-            }.addOnFailureListener { e ->
-                Toast.makeText(this, "Failed to retrieve download URL: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
-        }.addOnFailureListener { e ->
-            Toast.makeText(this, "Failed to upload image: ${e.message}", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun addItemToDatabase(item: StoreItem) {
-        databaseRef.push().setValue(item)
-            .addOnSuccessListener {
-                Toast.makeText(this, "Item added successfully", Toast.LENGTH_SHORT).show()
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, "Failed to add item", Toast.LENGTH_SHORT).show()
-            }
-    }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -150,6 +107,35 @@ class AddItemActivity : AppCompatActivity() {
                 Toast.makeText(this, "Failed to capture image", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun uploadImageToStorage(imageUri: Uri, itemName: String, price: Double) {
+        val storageRef = storageRef.child("item_images/${imageUri.lastPathSegment}")
+        val uploadTask = storageRef.putFile(imageUri)
+
+        uploadTask.addOnSuccessListener { taskSnapshot ->
+            // Image uploaded successfully, get the download URL
+            storageRef.downloadUrl.addOnSuccessListener { uri ->
+                val item = StoreItem(uri.toString(), itemName, price)
+                addItemToDatabase(item)
+                // Set the download URL in the EditText
+                imageUrlEditText.setText(uri.toString())
+            }.addOnFailureListener { e ->
+                Toast.makeText(this, "Failed to retrieve download URL: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }.addOnFailureListener { e ->
+            Toast.makeText(this, "Failed to upload image: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun addItemToDatabase(item: StoreItem) {
+        databaseRef.push().setValue(item)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Item added successfully", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Failed to add item", Toast.LENGTH_SHORT).show()
+            }
     }
 
     companion object {

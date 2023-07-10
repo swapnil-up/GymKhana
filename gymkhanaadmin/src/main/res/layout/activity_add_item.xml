@@ -38,15 +38,7 @@
             android:id="@+id/capturePhotoButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Capture Photo"
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp" />
-
-        <Button
-            android:id="@+id/addItemButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add Item"
+            android:text="Capture Photo and Add to Store"
             android:layout_gravity="center"
             android:layout_marginTop="16dp" />
 
