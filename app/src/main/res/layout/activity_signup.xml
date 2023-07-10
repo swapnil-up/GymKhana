@@ -14,121 +14,152 @@
 
 
         <LinearLayout
-            android:layout_width="423dp"
-            android:layout_height="108dp"
+            android:id="@+id/linearLayout"
+            android:layout_width="430dp"
+            android:layout_height="0dp"
             android:orientation="vertical"
             android:padding="20dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/loginRedirectText">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
         </LinearLayout>
+
+        <EditText
+            android:id="@+id/phonenumber"
+            android:layout_width="350dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginBottom="28dp"
+            android:background="@drawable/lavender_border"
+            android:drawableStart="@drawable/baseline_phone_24"
+            android:drawablePadding="8dp"
+            android:hint="@string/phone_number"
+            android:inputType="numberDecimal"
+            android:padding="8dp"
+            android:textColor="@color/grey"
+            app:layout_constraintBottom_toTopOf="@+id/signup_email"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="TextFields"
+            android:autofillHints="" />
 
         <TextView
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginStart="145dp"
-            android:layout_marginTop="62dp"
-            android:text="Sign Up"
+            android:layout_height="45dp"
+            android:layout_marginStart="149dp"
+            android:layout_marginTop="76dp"
+            android:layout_marginEnd="154dp"
+            android:layout_marginBottom="103dp"
             android:shadowColor="@color/black"
+            android:text="@string/sign_up"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="#FFFFFF"
             android:textIsSelectable="true"
             android:textSize="34sp"
             android:textStyle="bold"
             app:autoSizeTextType="uniform"
+            app:layout_constraintBottom_toTopOf="@+id/userName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            tools:ignore="HardcodedText" />
 
         <EditText
             android:id="@+id/signup_email"
             android:layout_width="350dp"
             android:layout_height="60dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginBottom="28dp"
             android:background="@drawable/lavender_border"
-            android:drawableLeft="@drawable/baseline_email_24"
+            android:drawableStart="@drawable/baseline_email_24"
             android:drawablePadding="8dp"
             android:hint="Email"
             android:padding="8dp"
             android:textColor="@color/grey"
+            app:layout_constraintBottom_toTopOf="@+id/signup_password"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userName" />
+            tools:ignore="HardcodedText"
+            android:autofillHints="" />
 
         <EditText
             android:id="@+id/userName"
             android:layout_width="350dp"
             android:layout_height="60dp"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="121dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginBottom="27dp"
             android:background="@drawable/lavender_border"
-            android:drawableLeft="@drawable/baseline_person_24"
+            android:drawableStart="@drawable/baseline_person_24"
             android:drawablePadding="8dp"
-            android:hint="Username"
+            android:hint="@string/username"
             android:inputType="textPersonName"
             android:padding="8dp"
             android:textColor="@color/grey"
+            app:layout_constraintBottom_toTopOf="@+id/phonenumber"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+            android:autofillHints="" />
 
         <EditText
             android:id="@+id/signup_password"
             android:layout_width="350dp"
             android:layout_height="60dp"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginBottom="28dp"
             android:background="@drawable/lavender_border"
-            android:drawableLeft="@drawable/baseline_lock_24"
+            android:drawableStart="@drawable/baseline_lock_24"
             android:drawablePadding="8dp"
-            android:hint="Password"
+            android:hint="@string/password"
             android:inputType="textPassword"
             android:padding="8dp"
             android:textColor="@color/grey"
+            app:layout_constraintBottom_toTopOf="@+id/signup_confirm"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/signup_email" />
+            android:autofillHints="" />
 
         <EditText
             android:id="@+id/signup_confirm"
             android:layout_width="350dp"
             android:layout_height="60dp"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginBottom="28dp"
             android:background="@drawable/lavender_border"
-            android:drawableLeft="@drawable/baseline_password_24"
+            android:drawableStart="@drawable/baseline_password_24"
             android:drawablePadding="8dp"
-            android:hint="Confirm Password"
+            android:hint="@string/confirm_password"
             android:inputType="textPassword"
             android:padding="8dp"
             android:textColor="@color/grey"
+            app:layout_constraintBottom_toTopOf="@+id/signup_button"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/signup_password" />
+            android:autofillHints="" />
 
         <Button
             android:id="@+id/signup_button"
             android:layout_width="350dp"
             android:layout_height="51dp"
-            android:layout_marginStart="28dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginBottom="28dp"
             android:background="@drawable/buttoncolor"
             android:text="Sign Up"
             android:textSize="18sp"
             app:cornerRadius="30dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/signup_confirm" />
+            app:layout_constraintBottom_toTopOf="@+id/loginRedirectText"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
             android:id="@+id/loginRedirectText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginStart="104dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginStart="107dp"
+            android:layout_marginBottom="21dp"
             android:padding="8dp"
-            android:text="Already an user? Login"
+            android:text="@string/already_an_user_login"
             android:textColor="@color/black"
             android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/signup_button" />
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
