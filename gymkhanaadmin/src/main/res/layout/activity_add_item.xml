@@ -7,18 +7,12 @@
     tools:context=".classes.AddItemActivity">
 
     <!-- activity_add_item.xml -->
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="16dp">
 
-        <EditText
-            android:id="@+id/imageURLEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Image URL" />
 
         <EditText
             android:id="@+id/itemNameEditText"
@@ -33,7 +27,20 @@
             android:hint="Price"
             android:inputType="numberDecimal" />
 
-        <!-- Add any other relevant UI elements here -->
+        <EditText
+            android:id="@+id/imageURLEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none"
+            android:hint="Image URL" />
+
+        <Button
+            android:id="@+id/capturePhotoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Capture Photo"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp" />
 
         <Button
             android:id="@+id/addItemButton"
