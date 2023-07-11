@@ -36,14 +36,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="UserName" />
+            android:text="First Name" />
 
         <EditText
             android:id="@+id/nameEditText"
             android:layout_width="match_parent"
             android:layout_height="54dp"
             android:background="@drawable/lavender_border"
-            android:hint="enter name"
+            android:hint="enter First Name"
             android:inputType="text" />
 
         <TextView
@@ -51,31 +51,31 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/email" />
+            android:text="Last Name" />
 
         <EditText
             android:id="@+id/emailEditText"
             android:layout_width="match_parent"
             android:layout_height="46dp"
             android:background="@drawable/lavender_border"
-            android:hint="enter email"
+            android:hint="enter Last Name"
 
-            android:inputType="textEmailAddress" />
+            android:inputType="text" />
 
         <TextView
             android:id="@+id/phoneTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/phone_number" />
+            android:text="Age" />
 
         <EditText
             android:id="@+id/phoneEditText"
             android:layout_width="match_parent"
             android:layout_height="51dp"
             android:background="@drawable/lavender_border"
-            android:hint="enter_phone_number"
-            android:inputType="phone" />
+            android:hint="enter age"
+            android:inputType="numberDecimal" />
 
         <Button
             android:id="@+id/saveButton"
