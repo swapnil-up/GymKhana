@@ -14,15 +14,27 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
+import com.bumptech.glide.Glide
+import android.app.Activity
+import android.net.Uri
+import com.example.gymkhana.databinding.ActivityUserDetailsBinding
+import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
+    private lateinit var storageReference: StorageReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         firebaseAuth = FirebaseAuth.getInstance()
+        storageReference = FirebaseStorage.getInstance().reference
+
 
         val sharedPreferences = getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
         val authToken = sharedPreferences.getString("AuthToken", null)
@@ -46,6 +58,20 @@ class MainActivity : AppCompatActivity() {
         val imageButton: ImageButton = findViewById(R.id.logoutbutton)
         val scanButton: ImageButton = findViewById(R.id.scanButton)
 
+        // Retrieve the user's photo URL from Firebase Storage
+        val userId = firebaseAuth.currentUser?.uid
+        if (userId != null) {
+            val photoRef = storageReference.child("user_photos").child(userId)
+            photoRef.downloadUrl.addOnSuccessListener { uri ->
+                // Load user photo using Glide
+                Glide.with(this@MainActivity)
+                    .load(uri)
+                    .into(imagebtn)
+            }.addOnFailureListener { exception ->
+                Toast.makeText(this@MainActivity, "Failed to load user photo", Toast.LENGTH_SHORT).show()
+            }
+        }
+
         scanButton.setOnClickListener {
             openQRScanner()
         }
@@ -53,6 +79,7 @@ class MainActivity : AppCompatActivity() {
         imagebtn.setOnClickListener {
             val i = Intent(this, UserDetails::class.java)
             startActivity(i)
+
         }
 
         imageButton.setOnClickListener {
@@ -77,7 +104,7 @@ class MainActivity : AppCompatActivity() {
                 val value2 = data["message"]
             }
 
-                startActivity(intent)
+            startActivity(intent)
         }
 
         storeButton.setOnClickListener {
@@ -144,5 +171,5 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()
-    }// Optional: Close the main activity to prevent
     }
+}
