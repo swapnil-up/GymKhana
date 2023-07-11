@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
+import com.example.gymkhanaadmin.classes.UpdateClasses
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 
@@ -44,9 +45,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         updateClasses.setOnClickListener{
-            val intent = Intent(this, updateClasses::class.java)
-            startActivity(intent)
+            val intent = Intent(this, UpdateClasses::class.java)
         }
+
+//        updateClasses.setOnClickListener{
+//            val intent = Intent(this, updateClasses::class.java)
+//            startActivity(intent)
+//        }
 /*
         storeButton.setOnClickListener {
             val intent = Intent(this, StoreActivity::class.java)
