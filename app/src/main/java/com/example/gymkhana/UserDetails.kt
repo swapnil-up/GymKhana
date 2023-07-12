@@ -75,6 +75,9 @@ class UserDetails : AppCompatActivity() {
 
         binding.saveButton.setOnClickListener {
             saveUserDetails()
+            val loginIntent = Intent(this, LoginActivity::class.java)
+            startActivity(loginIntent)
+            finish()
         }
     }
 
