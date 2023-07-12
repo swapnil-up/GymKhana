@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout4"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/Flax">
 
         <LinearLayout
@@ -20,7 +20,8 @@
             android:orientation="vertical"
             android:padding="20dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/loginRedirectText">
+            app:layout_constraintTop_toBottomOf="@+id/loginRedirectText"
+            tools:ignore="UnknownIdInLayout,UselessLeaf">
 
         </LinearLayout>
 
@@ -51,15 +52,17 @@
             android:layout_marginTop="34dp"
             android:layout_marginEnd="35dp"
             android:background="@drawable/lavender_border"
-            android:drawableLeft="@drawable/baseline_password_24"
-            android:drawableRight="@drawable/baseline_visibility_off_24"
+            android:drawableStart="@drawable/baseline_password_24"
             android:drawablePadding="8dp"
             android:hint="Password"
+            android:inputType="textPassword"
             android:padding="8dp"
             android:textColor="@color/grey"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_email" />
+            app:layout_constraintTop_toBottomOf="@+id/login_email"
+            android:autofillHints=""
+            tools:ignore="HardcodedText" />
 
         <Button
             android:id="@+id/login_button"
@@ -68,13 +71,14 @@
             android:layout_marginStart="35dp"
             android:layout_marginTop="27dp"
             android:layout_marginEnd="35dp"
-            android:text="Login"
+            android:text="@string/login"
             android:background="@drawable/buttoncolor"
             android:textSize="18sp"
             app:cornerRadius="60dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_password" />
+            app:layout_constraintTop_toBottomOf="@+id/login_password"
+            tools:ignore="VisualLintButtonSize" />
 
         <TextView
             android:id="@+id/forgot_password"
@@ -84,7 +88,7 @@
             android:layout_marginTop="19dp"
             android:layout_marginEnd="137dp"
             android:padding="8dp"
-            android:text="Forgot Password?"
+            android:text="@string/forgot_password"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -99,7 +103,7 @@
             android:layout_marginTop="19dp"
             android:layout_marginEnd="97dp"
             android:padding="8dp"
-            android:text="Not yet registered? Signup"
+            android:text="@string/not_yet_registered_signup"
             android:textColor="@color/black"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -114,11 +118,11 @@
             android:layout_marginTop="287dp"
             android:layout_marginEnd="176dp"
             android:gravity="center"
-            android:text="Log In"
+            android:text="@string/log_in"
             android:textAlignment="gravity"
             android:textAllCaps="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="#FFFFFF"
+            android:textColor="#0277BD"
             android:textDirection="anyRtl"
             android:textIsSelectable="false"
             android:textSize="34sp"

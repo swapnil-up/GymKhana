@@ -12,6 +12,7 @@ import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 
 class UserDetails : AppCompatActivity() {
     private lateinit var binding: ActivityUserDetailsBinding
@@ -54,6 +55,7 @@ class UserDetails : AppCompatActivity() {
                         photoRef.downloadUrl.addOnSuccessListener { uri ->
                             Glide.with(this@UserDetails)
                                 .load(uri)
+                                .apply(RequestOptions.circleCropTransform())
                                 .into(binding.userPhotoImageView)
                         }.addOnFailureListener { exception ->
                             Toast.makeText(this@UserDetails, "Failed to load user photo", Toast.LENGTH_SHORT).show()
