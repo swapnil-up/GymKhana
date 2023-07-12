@@ -11,6 +11,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 
 class UserDetails : AppCompatActivity() {
     private lateinit var binding: ActivityUserDetailsBinding
@@ -32,8 +34,6 @@ class UserDetails : AppCompatActivity() {
         userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
         storageReference = FirebaseStorage.getInstance().reference
 
-
-
         // Retrieve user details from Firebase Realtime Database
         val userReference: DatabaseReference = database.reference.child("Users").child(userId)
         userReference.addValueEventListener(object : ValueEventListener {
@@ -41,14 +41,25 @@ class UserDetails : AppCompatActivity() {
                 if (snapshot.exists()) {
                     val userDetails: HashMap<String, String>? = snapshot.value as? HashMap<String, String>
                     if (userDetails != null) {
-                        val name = userDetails["name"]
-                        val email = userDetails["email"]
-                        val phone = userDetails["phone"]
+                        val firstName = userDetails["firstName"]
+                        val lastName = userDetails["lastName"]
+                        val age = userDetails["age"]
 
                         // Set user details in the appropriate views
-                        binding.nameEditText.setText(name)
-                        binding.emailEditText.setText(email)
-                        binding.phoneEditText.setText(phone)
+                        binding.nameEditText.setText(firstName)
+                        binding.emailEditText.setText(lastName)
+                        binding.phoneEditText.setText(age)
+
+                        // Load user photo using Glide
+                        val photoRef = storageReference.child("user_photos").child(userId)
+                        photoRef.downloadUrl.addOnSuccessListener { uri ->
+                            Glide.with(this@UserDetails)
+                                .load(uri)
+                                .apply(RequestOptions.circleCropTransform())
+                                .into(binding.userPhotoImageView)
+                        }.addOnFailureListener { exception ->
+                            Toast.makeText(this@UserDetails, "Failed to load user photo", Toast.LENGTH_SHORT).show()
+                        }
                     }
                 }
             }
@@ -64,9 +75,6 @@ class UserDetails : AppCompatActivity() {
 
         binding.saveButton.setOnClickListener {
             saveUserDetails()
-            val loginIntent = Intent(this, LoginActivity::class.java)
-            startActivity(loginIntent)
-            finish()
         }
     }
 
@@ -85,16 +93,16 @@ class UserDetails : AppCompatActivity() {
     }
 
     private fun saveUserDetails() {
-        val name = binding.nameEditText.text.toString().trim()
-        val email = binding.emailEditText.text.toString().trim()
-        val phone = binding.phoneEditText.text.toString().trim()
+        val firstName = binding.nameEditText.text.toString().trim()
+        val lastName = binding.emailEditText.text.toString().trim()
+        val age = binding.phoneEditText.text.toString().trim()
 
-        if (name.isNotEmpty() && email.isNotEmpty() && phone.isNotEmpty()) {
+        if (firstName.isNotEmpty() && lastName.isNotEmpty() && age.isNotEmpty()) {
             val userReference: DatabaseReference = database.reference.child("Users").child(userId)
             val userDetails = HashMap<String, String>()
-            userDetails["name"] = name
-            userDetails["email"] = email
-            userDetails["phone"] = phone
+            userDetails["firstName"] = firstName
+            userDetails["lastName"] = lastName
+            userDetails["age"] = age
 
             userReference.setValue(userDetails).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
