@@ -2,8 +2,9 @@ package com.example.gymkhana
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -39,31 +40,44 @@ class FoodSearchActivity : AppCompatActivity() {
         ).build().create(NutritionApiService::class.java)
     }
 
+    private lateinit var nutritionalSearchAutoComplete: AutoCompleteTextView
+    private lateinit var nutritionalResultsTextView: TextView
+    private lateinit var nutritionButton: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_food_search)
-        val nutritionalInfoEditText: EditText = findViewById(R.id.nutritionalSearchEditText)
-        val nutritionButton: Button = findViewById(R.id.NutritionButton)
-        val nutritionResultsEditText: EditText = findViewById(R.id.nutritionalResultsEditText)
+
+        nutritionalSearchAutoComplete = findViewById(R.id.nutritionalSearchAutoComplete)
+        nutritionalResultsTextView = findViewById(R.id.nutritionalResultsTextView)
+        nutritionButton = findViewById(R.id.nutritionButton)
+
+        val keywords = NutritionItem.nutritionList.map { it.name }
+        val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, keywords)
+        nutritionalSearchAutoComplete.setAdapter(adapter)
 
         nutritionButton.setOnClickListener {
-            val food = nutritionalInfoEditText.text.toString()
-            launchCoroutine(food, nutritionResultsEditText)
-        }
-    }
-
-    private fun launchCoroutine(food: String, nutritionResultsEditText: EditText) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val nutritionalData = fetchNutritionalInfo(food)
-
-            withContext(Dispatchers.Main) {
-                updateUI(nutritionalData, nutritionResultsEditText)
+            val selectedKeyword = nutritionalSearchAutoComplete.text.toString()
+            val selectedItem = NutritionItem.nutritionList.find { it.name.equals(selectedKeyword, ignoreCase = true) }
+            selectedItem?.let {
+                val itemId = it.id
+                launchCoroutine(itemId)
             }
         }
     }
 
-    private suspend fun fetchNutritionalInfo(food: String): NutritionalData? {
-        val response = apiService.getNutritionalInfo(food.toInt())
+    private fun launchCoroutine(itemId: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val nutritionalData = fetchNutritionalInfo(itemId)
+
+            withContext(Dispatchers.Main) {
+                updateUI(nutritionalData)
+            }
+        }
+    }
+
+    private suspend fun fetchNutritionalInfo(itemId: Int): NutritionalData? {
+        val response = apiService.getNutritionalInfo(itemId)
 
         if (response.isSuccessful) {
             val responseBody = response.body()
@@ -76,41 +90,6 @@ class FoodSearchActivity : AppCompatActivity() {
                         nutrient.percentOfDailyNeeds
                     )
                 }
-
-                /*val properties = responseBody.properties.map { property ->
-                    Property(
-                        property.name,
-                        property.amount,
-                        property.unit
-                    )
-                }
-
-                val flavonoids = responseBody.flavonoids.map { flavonoid ->
-                    Flavonoid(
-                        flavonoid.name,
-                        flavonoid.amount,
-                        flavonoid.unit
-                    )
-                }
-
-                val ingredients = responseBody.ingredients.map { ingredient ->
-                    val ingredientNutrients = ingredient.nutrients.map { nutrient ->
-                        Nutrient(
-                            nutrient.name,
-                            nutrient.amount,
-                            nutrient.unit,
-                            nutrient.percentOfDailyNeeds
-                        )
-                    }
-
-                    Ingredient(
-                        ingredient.id,
-                        ingredient.name,
-                        ingredient.amount,
-                        ingredient.unit,
-                        ingredientNutrients
-                    )
-                }*/
 
                 val caloricBreakdown = CaloricBreakdown(
                     responseBody.caloricBreakdown.percentProtein,
@@ -125,9 +104,6 @@ class FoodSearchActivity : AppCompatActivity() {
 
                 return NutritionalData(
                     nutrients,
-                    /*properties,
-                    flavonoids,
-                    ingredients,*/
                     caloricBreakdown,
                     weightPerServing
                 )
@@ -137,33 +113,24 @@ class FoodSearchActivity : AppCompatActivity() {
         return null
     }
 
-    private fun updateUI(nutritionalData: NutritionalData?, nutritionalInfoTextView: TextView) {
+    private fun updateUI(nutritionalData: NutritionalData?) {
         if (nutritionalData != null) {
             val nutrientsText = buildNutrientsText(nutritionalData.nutrients)
-            /*val propertiesText = buildPropertiesText(nutritionalData.properties)
-            val flavonoidsText = buildFlavonoidsText(nutritionalData.flavonoids)
-            val ingredientsText = buildIngredientsText(nutritionalData.ingredients)*/
             val caloricBreakdownText = buildCaloricBreakdownText(nutritionalData.caloricBreakdown)
             val weightPerServingText = buildWeightPerServingText(nutritionalData.weightPerServing)
 
             val nutritionalInfoText = StringBuilder().apply {
                 append(nutrientsText)
                 append("\n\n")
-                /*append(propertiesText)
-                append("\n\n")
-                append(flavonoidsText)
-                append("\n\n")
-                append(ingredientsText)
-                append("\n\n")*/
                 append(caloricBreakdownText)
                 append("\n\n")
                 append(weightPerServingText)
             }.toString()
 
-            nutritionalInfoTextView.text = nutritionalInfoText
+            nutritionalResultsTextView.text = nutritionalInfoText
         } else {
             // Handle the case when the API request is not successful
-            nutritionalInfoTextView.text = "Failed to fetch nutritional information"
+            nutritionalResultsTextView.text = "Failed to fetch nutritional information"
         }
     }
 
@@ -172,34 +139,6 @@ class FoodSearchActivity : AppCompatActivity() {
         for (nutrient in nutrients) {
             val nutrientText = "${nutrient.name}: ${nutrient.amount} ${nutrient.unit}"
             stringBuilder.append(nutrientText).append("\n")
-        }
-        return stringBuilder.toString()
-    }
-
-    private fun buildPropertiesText(properties: List<Property>): String {
-        val stringBuilder = StringBuilder("Properties:\n")
-        for (property in properties) {
-            val propertyText = "${property.name}: ${property.amount} ${property.unit}"
-            stringBuilder.append(propertyText).append("\n")
-        }
-        return stringBuilder.toString()
-    }
-
-    private fun buildFlavonoidsText(flavonoids: List<Flavonoid>): String {
-        val stringBuilder = StringBuilder("Flavonoids:\n")
-        for (flavonoid in flavonoids) {
-            val flavonoidText = "${flavonoid.name}: ${flavonoid.amount} ${flavonoid.unit}"
-            stringBuilder.append(flavonoidText).append("\n")
-        }
-        return stringBuilder.toString()
-    }
-
-    private fun buildIngredientsText(ingredients: List<Ingredient>): String {
-        val stringBuilder = StringBuilder("Ingredients:\n")
-        for (ingredient in ingredients) {
-            val ingredientText = "${ingredient.name} - ${ingredient.amount} ${ingredient.unit}\n"
-            val ingredientNutrientsText = buildNutrientsText(ingredient.nutrients)
-            stringBuilder.append(ingredientText).append(ingredientNutrientsText).append("\n")
         }
         return stringBuilder.toString()
     }
