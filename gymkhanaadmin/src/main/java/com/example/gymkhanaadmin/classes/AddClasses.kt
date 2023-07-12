@@ -11,24 +11,29 @@ import android.provider.MediaStore
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.gymkhanaadmin.R
 
 class AddClasses : AppCompatActivity() {
 //    val PICK_IMAGE_REQUEST = 1
+    var PICK_IMAGE = 0
 
     lateinit var addClassImg: ImageView
     lateinit var addClassName: EditText
     lateinit var addClassDescription: EditText
     lateinit var addClassBtn: Button
 
-
+    private var name: String = ""
+    private var discription: String = ""
+    private var downloadUrl = ""
 
 
 
     private val contract = registerForActivityResult(ActivityResultContracts.GetContent()){
         addClassImg.setImageURI(it)
+        PICK_IMAGE = 1
     }
 
 
@@ -50,8 +55,27 @@ class AddClasses : AppCompatActivity() {
             contract.launch("image/*")
         }
 
+        addClassBtn.setOnClickListener{
+            checkValidation()
+        }
+
     }
 
+    private fun checkValidation() {
+        name = addClassName.text.trim().toString()
+        discription = addClassDescription.text.trim().toString()
+
+        if (name.isEmpty()){
+            addClassName.error = "Name is empty."
+            addClassName.requestFocus()
+        }else if (discription.isEmpty()){
+            addClassDescription.error = "Description is empty."
+            addClassName.requestFocus()
+        }else if (PICK_IMAGE==0){
+            Toast.makeText(applicationContext, "Add Image", Toast.LENGTH_SHORT).show()
+        }
+
+    }
 
 
 //    private fun openGallery() {
