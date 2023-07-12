@@ -5,13 +5,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
     namespace 'com.example.gymkhanaadmin'
 
     defaultConfig {
         applicationId "com.example.gymkhanaadmin"
         minSdkVersion 24
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionCode 1
         versionName "1.0"
 
