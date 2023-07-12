@@ -3,6 +3,7 @@ package com.example.gymkhanaadmin.classes
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import com.example.gymkhanaadmin.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -15,7 +16,9 @@ class UpdateClasses : AppCompatActivity() {
 
         fab.setOnClickListener{
             val intent = Intent(this, AddClasses::class.java)
+            startActivity(intent)
         }
 
     }
+
 }

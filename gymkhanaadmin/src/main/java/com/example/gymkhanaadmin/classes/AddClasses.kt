@@ -11,31 +11,46 @@ import android.provider.MediaStore
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import com.example.gymkhanaadmin.R
 
 class AddClasses : AppCompatActivity() {
+//    val PICK_IMAGE_REQUEST = 1
 
-    private val PICK_IMAGE_REQUEST = 1
-    private val addClassImg: ImageView = findViewById(R.id.addClassImg)
-    private val addClassName: EditText = findViewById(R.id.addClassName)
-    private val addClassDescription: EditText = findViewById(R.id.addClassDescription)
-    private     val addClassBtn: Button = findViewById(R.id.addClassBtn)
+    lateinit var addClassImg: ImageView
+    lateinit var addClassName: EditText
+    lateinit var addClassDescription: EditText
+    lateinit var addClassBtn: Button
+
+
+    private val contract = registerForActivityResult(ActivityResultContracts.GetContent()){
+        addClassImg.setImageURI(it)
+    }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_classes)
 
 
+        addClassImg = findViewById(R.id.addClassImg)
+        addClassName = findViewById(R.id.addClassName)
+        addClassDescription = findViewById(R.id.addClassDescription)
+        addClassBtn = findViewById(R.id.addClassBtn)
 
 
-//        addClassImg.setOnClickListener {
-//            openGallery()
-//        }
+
+
+        addClassImg.setOnClickListener {
+            contract.launch("image/*")
+        }
 
     }
 
 
-//
+
 //    private fun openGallery() {
 //        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
 //        startActivityForResult(intent, PICK_IMAGE_REQUEST)

@@ -16,7 +16,7 @@
             android:id="@+id/addClassImg"
             android:layout_width="match_parent"
             android:layout_height="120dp"
-            android:src="@drawable/yogalogo"
+            android:src="@drawable/addimage"
             android:layout_marginTop="36dp"/>
 
         <com.google.android.material.textfield.TextInputLayout
