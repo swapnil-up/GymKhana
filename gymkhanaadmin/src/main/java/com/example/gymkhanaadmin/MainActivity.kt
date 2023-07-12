@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
         val foodButton :Button= findViewById(R.id.FoodSearch)
         val mealPlanButton :Button= findViewById(R.id.mealPlan)
         val updateClasses :Button= findViewById(R.id.updateClasses)
+        val QRgenerator:Button=findViewById(R.id.QRgenerator)
 
 
 
@@ -46,6 +47,11 @@ class MainActivity : AppCompatActivity() {
 
         updateClasses.setOnClickListener{
             val intent = Intent(this, UpdateClasses::class.java)
+            startActivity(intent)
+        }
+
+        QRgenerator.setOnClickListener {
+            val intent = Intent(this, QRgeneratorActivity::class.java)
             startActivity(intent)
         }
 /*
