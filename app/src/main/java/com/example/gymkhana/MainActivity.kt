@@ -17,24 +17,28 @@ import com.google.zxing.integration.android.IntentResult
 import com.bumptech.glide.Glide
 import android.app.Activity
 import android.net.Uri
-import com.example.gymkhana.databinding.ActivityUserDetailsBinding
+import com.bumptech.glide.request.RequestOptions
+import com.example.gymkhana.databinding.ActivityMainBinding
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 
 
-
 class MainActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var storageReference: StorageReference
+    private lateinit var database: FirebaseDatabase
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
 
         firebaseAuth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance("https://gymkhana-5560f-default-rtdb.asia-southeast1.firebasedatabase.app/")
         storageReference = FirebaseStorage.getInstance().reference
-
 
         val sharedPreferences = getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
         val authToken = sharedPreferences.getString("AuthToken", null)
@@ -44,21 +48,17 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish() // Optional: Close the main activity to prevent returning to it
-        } else {
-            // User is logged in
-            // Update the UI or perform any other necessary actions
         }
 
-        val imagebtn: ImageButton = findViewById(R.id.userIcon)
-        val attendanceButton: Button = findViewById(R.id.attendance)
-        val notificationbtn: Button = findViewById(R.id.notificationbtn)
-        val storeButton: Button = findViewById(R.id.Store)
-        val foodButton: Button = findViewById(R.id.FoodSearch)
-        val mealPlanButton: Button = findViewById(R.id.mealPlan)
-        val imageButton: ImageButton = findViewById(R.id.logoutbutton)
-        val scanButton: ImageButton = findViewById(R.id.scanButton)
+        val imagebtn: ImageButton = binding.userIcon
+        val attendanceButton: Button = binding.attendance
+        val notificationbtn: Button = binding.notificationbtn
+        val storeButton: Button = binding.Store
+        val foodButton: Button = binding.FoodSearch
+        val mealPlanButton: Button = binding.mealPlan
+        val imageButton: ImageButton = binding.logoutbutton
+        val scanButton: ImageButton = binding.scanButton
 
-        // Retrieve the user's photo URL from Firebase Storage
         val userId = firebaseAuth.currentUser?.uid
         if (userId != null) {
             val photoRef = storageReference.child("user_photos").child(userId)
@@ -66,10 +66,36 @@ class MainActivity : AppCompatActivity() {
                 // Load user photo using Glide
                 Glide.with(this@MainActivity)
                     .load(uri)
+                    .apply(RequestOptions.circleCropTransform())
                     .into(imagebtn)
             }.addOnFailureListener { exception ->
                 Toast.makeText(this@MainActivity, "Failed to load user photo", Toast.LENGTH_SHORT).show()
             }
+            val userReference: DatabaseReference = database.reference.child("Users").child(userId)
+            userReference.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        val userDetails: HashMap<String, String>? = snapshot.value as? HashMap<String, String>
+                        if (userDetails != null) {
+                            val firstName = userDetails["firstName"] ?: ""
+                            val lastName = userDetails["lastName"] ?: ""
+                            // Set the first name in the TextView
+                            binding.userName.text = firstName
+                            binding.lname.text = lastName
+                        }
+                    }
+
+                    fun onCancelled(error: DatabaseError) {
+                        Toast.makeText(this@MainActivity, "Failed to retrieve user details", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+            })
+
+
         }
 
         scanButton.setOnClickListener {
@@ -79,7 +105,6 @@ class MainActivity : AppCompatActivity() {
         imagebtn.setOnClickListener {
             val i = Intent(this, UserDetails::class.java)
             startActivity(i)
-
         }
 
         imageButton.setOnClickListener {
@@ -142,12 +167,10 @@ class MainActivity : AppCompatActivity() {
         integrator.initiateScan()
     }
 
-    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        val result: IntentResult? =
-            IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        val result: IntentResult? = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null && result.contents != null) {
             // QR code scanned successfully, handle the result
             val scannedData: String = result.contents
