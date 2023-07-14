@@ -6,6 +6,13 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.firestore.FirebaseFirestore
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -16,7 +23,8 @@ class AttendanceActivity : AppCompatActivity() {
     private lateinit var currentDate: Calendar
     private lateinit var totalDaysTextView: TextView
     private lateinit var streakLengthTextView: TextView
-    private val highlightedDates = mutableMapOf<Date, Int>()
+    private lateinit var userId: String
+    private lateinit var attendanceRef: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,8 +40,18 @@ class AttendanceActivity : AppCompatActivity() {
         currentDate = Calendar.getInstance()
         val currentMonthYear = getCurrentMonthYear(currentDate)
         monthYearTextView.text = currentMonthYear
+        userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        var firestore = FirebaseFirestore.getInstance()
+        val database = FirebaseDatabase.getInstance("https://gymkhana-5560f-default-rtdb.asia-southeast1.firebasedatabase.app/")
+        // Initialize Firebase Realtime Database reference
+        attendanceRef = FirebaseDatabase.getInstance("https://gymkhana-5560f-default-rtdb.asia-southeast1.firebasedatabase.app/").getReference("attendanceGUI")
+        userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        // Create and initialize the CalendarAdapter
+        calendarAdapter = CalendarAdapter(this, currentDate, attendanceRef) { totalDays, streakLength ->
+            updateTotalDaysAndStreak(totalDays, streakLength)
+        }
 
-        calendarAdapter = CalendarAdapter(this, generateDatesForMonth(currentDate), highlightedDates)
+        // Set the adapter on the RecyclerView
         calendarRecyclerView.adapter = calendarAdapter
         calendarRecyclerView.layoutManager = GridLayoutManager(this, 7)
 
@@ -44,25 +62,8 @@ class AttendanceActivity : AppCompatActivity() {
         nextMonthButton.setOnClickListener {
             navigateToNextMonth()
         }
-
+        calendarAdapter.fetchAttendanceData(userId)
         updateStreakFeatures()
-    }
-
-    private fun generateDatesForMonth(calendar: Calendar): List<Date> {
-        val dates = mutableListOf<Date>()
-
-        val startCalendar = calendar.clone() as Calendar
-        startCalendar.set(Calendar.DAY_OF_MONTH, 1)
-
-        val endCalendar = calendar.clone() as Calendar
-        endCalendar.set(Calendar.DAY_OF_MONTH, endCalendar.getActualMaximum(Calendar.DAY_OF_MONTH))
-
-        while (!startCalendar.after(endCalendar)) {
-            dates.add(startCalendar.time)
-            startCalendar.add(Calendar.DAY_OF_MONTH, 1)
-        }
-
-        return dates
     }
 
     private fun getCurrentMonthYear(calendar: Calendar): String {
@@ -83,60 +84,54 @@ class AttendanceActivity : AppCompatActivity() {
     }
 
     private fun updateCalendar() {
-        val dates = generateDatesForMonth(currentDate)
-        calendarAdapter.updateDates(dates)
-        calendarAdapter.notifyDataSetChanged()
-
-        val monthYearTextView: TextView = findViewById(R.id.monthYearTextView)
         val currentMonthYear = getCurrentMonthYear(currentDate)
+        val monthYearTextView: TextView = findViewById(R.id.monthYearTextView)
         monthYearTextView.text = currentMonthYear
+        calendarAdapter.updateMonthYear(currentMonthYear)
+        calendarAdapter.notifyDataSetChanged()
     }
+
+    private fun updateTotalDaysAndStreak(totalDays: Int, streakLength: Int) {
+        totalDaysTextView.text = "Total Days: $totalDays"
+        streakLengthTextView.text = "Streak Length: $streakLength"
+
+        // Replace "userId" with the actual user ID
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        calendarAdapter.saveAttendanceData(userId)
+    }
+
+
 
     private fun updateStreakFeatures() {
-        val dates = generateDatesForMonth(currentDate)
-        val totalDays = calculateTotalDaysPresent(dates)
-        val streakLength = calculateStreakLength(dates)
-        updateTotalDays(totalDays)
-        updateStreakLength(streakLength)
-    }
+        // Implement your streak calculation logic based on the attendance data
+        // Retrieve the attendance data for the current user and update the streak features
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
 
-    fun updateTotalDays(totalDays: Int) {
-        totalDaysTextView.text = "Total Days: $totalDays"
-    }
-
-    fun updateStreakLength(streakLength: Int) {
-        streakLengthTextView.text = "Streak Length: $streakLength"
-    }
-
-    private fun calculateTotalDaysPresent(dates: List<Date>): Int {
-        var totalDays = 0
-        for (date in dates) {
-            if (highlightedDates.containsKey(date)) {
-                totalDays++
-            }
-        }
-        return totalDays
-    }
-
-    private fun calculateStreakLength(dates: List<Date>): Int {
-        var streakLength = 0
-        var currentStreak = 0
-
-        for (date in dates) {
-            if (highlightedDates.containsKey(date)) {
-                currentStreak++
-            } else {
-                if (currentStreak > streakLength) {
-                    streakLength = currentStreak
+        userId?.let { userId ->
+            attendanceRef.child(userId).addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val attendanceData = snapshot.value as? Map<String, Int> ?: emptyMap()
+                    val totalDays = attendanceData.size
+                    val streakLength = calculateStreakLength(attendanceData)
+                    updateTotalDaysAndStreak(totalDays, streakLength)
                 }
-                currentStreak = 0
-            }
-        }
 
-        if (currentStreak > streakLength) {
-            streakLength = currentStreak
+                override fun onCancelled(error: DatabaseError) {
+                    // Handle error
+                }
+            })
         }
+    }
 
-        return streakLength
+    override fun onDestroy() {
+        super.onDestroy()
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+        calendarAdapter.saveAttendanceData(userId)
+    }
+
+    private fun calculateStreakLength(attendanceData: Map<String, Int>): Int {
+        // Implement your streak calculation logic based on the attendanceData
+        // Return the streak length
+        return 0
     }
 }
