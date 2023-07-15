@@ -22,7 +22,8 @@ import com.example.gymkhana.databinding.ActivityMainBinding
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
@@ -35,9 +36,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         firebaseAuth = FirebaseAuth.getInstance()
-        database = FirebaseDatabase.getInstance("https://gymkhana-5560f-default-rtdb.asia-southeast1.firebasedatabase.app/")
+        database =
+            FirebaseDatabase.getInstance("https://gymkhana-5560f-default-rtdb.asia-southeast1.firebasedatabase.app/")
         storageReference = FirebaseStorage.getInstance().reference
 
         val sharedPreferences = getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
@@ -69,13 +70,15 @@ class MainActivity : AppCompatActivity() {
                     .apply(RequestOptions.circleCropTransform())
                     .into(imagebtn)
             }.addOnFailureListener { exception ->
-                Toast.makeText(this@MainActivity, "Failed to load user photo", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Failed to load user photo", Toast.LENGTH_SHORT)
+                    .show()
             }
             val userReference: DatabaseReference = database.reference.child("Users").child(userId)
             userReference.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {
-                        val userDetails: HashMap<String, String>? = snapshot.value as? HashMap<String, String>
+                        val userDetails: HashMap<String, String>? =
+                            snapshot.value as? HashMap<String, String>
                         if (userDetails != null) {
                             val firstName = userDetails["firstName"] ?: ""
                             val lastName = userDetails["lastName"] ?: ""
@@ -86,16 +89,23 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     fun onCancelled(error: DatabaseError) {
-                        Toast.makeText(this@MainActivity, "Failed to retrieve user details", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Failed to retrieve user details",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
+                    // Handle the onCancelled event
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Failed to retrieve user details",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             })
-
-
         }
 
         scanButton.setOnClickListener {
@@ -117,19 +127,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         notificationbtn.setOnClickListener {
-            val intent = Intent(this, NotificationActivity::class.java)
-
-            // Retrieve the data from the intent extras
-            val data = intent.getSerializableExtra("data") as? HashMap<String, String>
-
-            // Check if the intent extras contain any data payload
-            if (data != null) {
-                // Access the data values
-                val value1 = data["title"]
-                val value2 = data["message"]
-            }
-
-            startActivity(intent)
+            // Redirect to NotificationActivity without passing any extra data
+            startActivity(Intent(this, NotificationActivity::class.java))
         }
 
         storeButton.setOnClickListener {
@@ -166,7 +165,6 @@ class MainActivity : AppCompatActivity() {
         integrator.setPrompt("Scan a QR Code")
         integrator.initiateScan()
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -175,11 +173,46 @@ class MainActivity : AppCompatActivity() {
             // QR code scanned successfully, handle the result
             val scannedData: String = result.contents
             Toast.makeText(this, "Scanned QR Code: $scannedData", Toast.LENGTH_LONG).show()
+
+            val userId = firebaseAuth.currentUser?.uid
+            if (userId != null) {
+                val attendanceRef: DatabaseReference = database.reference.child("Attendance")
+                val newAttendanceRef = attendanceRef.child(userId).push()
+
+                // Get the current date and time and format them
+                val currentDateTime = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).format(Date())
+
+                newAttendanceRef.child("dateTime").setValue(currentDateTime)
+                newAttendanceRef.child("message").setValue(scannedData)
+                    .addOnSuccessListener {
+                        // Successfully stored the scanned data in the "Attendance" node
+
+                        // Create a new notification entry under the current user's node
+                        val userNotificationsRef: DatabaseReference = database.reference
+                            .child("Users")
+                            .child(userId)
+                            .child("Notifications")
+
+                        val newNotificationRef = userNotificationsRef.push()
+                        newNotificationRef.child("title").setValue(currentDateTime)
+                        newNotificationRef.child("message").setValue(scannedData)
+
+                        // Create a new notification entry in the "Notifications" node for all users
+                        val notificationsRef: DatabaseReference = database.reference.child("Notifications")
+                        val newAdminNotificationRef = notificationsRef.push()
+                        newAdminNotificationRef.child("title").setValue(currentDateTime)
+                        newAdminNotificationRef.child("message").setValue(scannedData)
+                    }
+                    .addOnFailureListener { exception ->
+                        Toast.makeText(this, "Failed to store scanned data", Toast.LENGTH_SHORT).show()
+                    }
+            }
         } else {
             // QR code scanning canceled or failed
             Toast.makeText(this, "Scan canceled or failed", Toast.LENGTH_LONG).show()
         }
     }
+
 
     private fun logout() {
         firebaseAuth.signOut()

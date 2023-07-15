@@ -139,4 +139,5 @@ class AttendanceActivity : AppCompatActivity() {
 
         return streakLength
     }
+
 }
