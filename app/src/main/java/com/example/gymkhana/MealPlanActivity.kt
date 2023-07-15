@@ -2,8 +2,9 @@ package com.example.gymkhana
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import android.widget.Button
-import android.widget.EditText
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +13,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
 
 class MealPlanActivity : AppCompatActivity() {
 
@@ -30,22 +30,34 @@ class MealPlanActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_meal_plan)
 
-        val timeFrameEditText: EditText = findViewById(R.id.timeFrameEditText)
-        val targetCaloriesEditText: EditText = findViewById(R.id.targetCaloriesEditText)
-        val dietEditText: EditText = findViewById(R.id.dietEditText)
+        val timeFrameSpinner: Spinner = findViewById(R.id.timeFrameSpinner)
+        val targetCaloriesSpinner: Spinner = findViewById(R.id.targetCaloriesSpinner)
+        val dietSpinner: Spinner = findViewById(R.id.dietSpinner)
         val generateButton: Button = findViewById(R.id.generateButton)
+
+        // Set up the spinners with their respective options
+        val timeFrameOptions = resources.getStringArray(R.array.time_frame_options)
+        val targetCaloriesOptions = resources.getStringArray(R.array.target_calories_options)
+        val dietOptions = resources.getStringArray(R.array.diet_options)
+
+        val timeFrameAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, timeFrameOptions)
+        val targetCaloriesAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, targetCaloriesOptions)
+        val dietAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, dietOptions)
+
+        timeFrameSpinner.adapter = timeFrameAdapter
+        targetCaloriesSpinner.adapter = targetCaloriesAdapter
+        dietSpinner.adapter = dietAdapter
 
 
         // Call the generateMealPlan method to request and display the meal plan
         generateButton.setOnClickListener {
-            val timeFrame = timeFrameEditText.text.toString()
-            val targetCalories = targetCaloriesEditText.text.toString().toInt()
-            val diet = dietEditText.text.toString()
+            val timeFrame = timeFrameSpinner.selectedItem.toString()
+            val targetCalories = targetCaloriesSpinner.selectedItem.toString().toInt()
+            val diet = dietSpinner.selectedItem.toString()
 
             generateMealPlan(timeFrame, targetCalories, diet)
         }
     }
-
 
     private fun generateMealPlan(timeFrame: String, targetCalories: Int, diet: String) {
         val call = mealPlannerApi.generateMealPlan(timeFrame, targetCalories, diet, API_KEY)
@@ -80,7 +92,6 @@ class MealPlanActivity : AppCompatActivity() {
         })
     }
 
-
     private fun displayMealPlan(meals: List<Meal>?, nutrients: Nutrients?) {
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView_meals)
 
@@ -93,5 +104,4 @@ class MealPlanActivity : AppCompatActivity() {
             Toast.makeText(this, "No meals found.", Toast.LENGTH_SHORT).show()
         }
     }
-
 }
