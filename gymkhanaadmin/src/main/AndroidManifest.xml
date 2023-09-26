@@ -28,7 +28,7 @@
             android:label="Capture Photo"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".classes.AddItemActivity"
+            android:name=".AddItemActivity"
             android:exported="false" />
         <activity
             android:name=".classes.AddClasses"
