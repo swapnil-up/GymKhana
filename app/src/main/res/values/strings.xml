@@ -35,28 +35,28 @@
     <string name="forgot_password">Forgot Password?</string>
     <string name="not_yet_registered_signup">Not yet registered? Signup</string>
 
-        <string-array name="time_frame_options">
-            <item>Day</item>
-        </string-array>
+    <string-array name="time_frame_options">
+        <item>Day</item>
+    </string-array>
 
-        <string-array name="target_calories_options">
-            <item>1500</item>
-            <item>2000</item>
-            <item>2500</item>
-            <item>3000</item>
-        </string-array>
+    <string-array name="target_calories_options">
+        <item>1500</item>
+        <item>2000</item>
+        <item>2500</item>
+        <item>3000</item>
+    </string-array>
 
-        <string-array name="diet_options">
-            <item>Gluten Free</item>
-            <item>Ketogenic</item>
-            <item>Vegetarian</item>
-            <item>Lacto-Vegetarian</item>
-            <item>Ovo-Vegetarian</item>
-            <item>Vegan</item>
-            <item>Pescetarian</item>
-            <item>Paleo</item>
-            <item>Primal</item>
-            <item>Low FODMAP</item>
-            <item>Whole30</item>
-        </string-array>
-    </resources>
+    <string-array name="diet_options">
+        <item>Gluten Free</item>
+        <item>Ketogenic</item>
+        <item>Vegetarian</item>
+        <item>Lacto-Vegetarian</item>
+        <item>Ovo-Vegetarian</item>
+        <item>Vegan</item>
+        <item>Pescetarian</item>
+        <item>Paleo</item>
+        <item>Primal</item>
+        <item>Low FODMAP</item>
+        <item>Whole30</item>
+    </string-array>
+</resources>

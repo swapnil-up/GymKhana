@@ -64,18 +64,17 @@
         app:layout_constraintStart_toStartOf="@+id/userName"
         app:layout_constraintTop_toBottomOf="@+id/userName" />
 
-    <ImageView
-        android:id="@+id/imageView6"
+    <Button
+        android:id="@+id/payment"
         android:layout_width="85dp"
         android:layout_height="85dp"
         android:layout_marginStart="88dp"
-        android:background="@color/BurntSienna"
         app:layout_constraintBottom_toBottomOf="@+id/Store"
         app:layout_constraintStart_toEndOf="@+id/Store"
         app:layout_constraintTop_toTopOf="@+id/Store"
         app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/cashlesspayment"
-        app:tint="@color/secondary" />
+        android:background="@drawable/cashlesspayment"
+        app:tint="@null" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"

@@ -59,6 +59,7 @@ class MainActivity : AppCompatActivity() {
         val mealPlanButton: Button = binding.mealPlan
         val imageButton: ImageButton = binding.logoutbutton
         val scanButton: ImageButton = binding.scanButton
+        val payButton: Button = binding.payment
 
         val userId = firebaseAuth.currentUser?.uid
         if (userId != null) {
@@ -114,6 +115,11 @@ class MainActivity : AppCompatActivity() {
 
         imagebtn.setOnClickListener {
             val i = Intent(this, UserDetails::class.java)
+            startActivity(i)
+        }
+
+        payButton.setOnClickListener {
+            val i = Intent(this, PaymentActivity::class.java)
             startActivity(i)
         }
 
