@@ -44,11 +44,13 @@ class UserDetails : AppCompatActivity() {
                         val firstName = userDetails["firstName"]
                         val lastName = userDetails["lastName"]
                         val age = userDetails["age"]
+                        val number = userDetails["number"]
 
                         // Set user details in the appropriate views
                         binding.nameEditText.setText(firstName)
                         binding.emailEditText.setText(lastName)
                         binding.phoneEditText.setText(age)
+                        binding.phoneEditText2.setText(number)
 
                         // Load user photo using Glide
                         val photoRef = storageReference.child("user_photos").child(userId)
@@ -75,7 +77,7 @@ class UserDetails : AppCompatActivity() {
 
         binding.saveButton.setOnClickListener {
             saveUserDetails()
-            val loginIntent = Intent(this, LoginActivity::class.java)
+            val loginIntent = Intent(this, MainActivity::class.java)
             startActivity(loginIntent)
             finish()
         }
@@ -99,6 +101,7 @@ class UserDetails : AppCompatActivity() {
         val firstName = binding.nameEditText.text.toString().trim()
         val lastName = binding.emailEditText.text.toString().trim()
         val age = binding.phoneEditText.text.toString().trim()
+        val number =binding.phoneEditText2.text.toString().trim()
 
         if (firstName.isNotEmpty() && lastName.isNotEmpty() && age.isNotEmpty()) {
             val userReference: DatabaseReference = database.reference.child("Users").child(userId)
@@ -106,6 +109,7 @@ class UserDetails : AppCompatActivity() {
             userDetails["firstName"] = firstName
             userDetails["lastName"] = lastName
             userDetails["age"] = age
+            userDetails["number"] = number
 
             userReference.setValue(userDetails).addOnCompleteListener { task ->
                 if (task.isSuccessful) {

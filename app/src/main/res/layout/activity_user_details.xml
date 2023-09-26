@@ -81,6 +81,22 @@
             android:hint="enter age"
             android:inputType="numberDecimal" />
 
+        <TextView
+            android:id="@+id/phoneTextView2"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:layout_marginTop="24dp"
+            android:text="Phone Number"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+        <EditText
+            android:id="@+id/phoneEditText2"
+            android:layout_width="match_parent"
+            android:layout_height="51dp"
+            android:background="@drawable/rectangle_user_details"
+            android:hint="enter phone number"
+            android:inputType="numberDecimal" />
+
         <Button
             android:id="@+id/saveButton"
             android:layout_width="wrap_content"
