@@ -24,12 +24,12 @@ class SignupActivity : AppCompatActivity() {
 
         binding.signupButton.setOnClickListener{
             val email = binding.signupEmail.text.toString()
-            val userName = binding.userName.text.toString()
+            //val userName = binding.userName.text.toString()
             val password = binding.signupPassword.text.toString()
             val confirmPassword = binding.signupConfirm.text.toString()
-            val phoneNumber = binding.phonenumber.text.toString()
+          //  val phoneNumber = binding.phonenumber.text.toString()
 
-            if (email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty() && phoneNumber.isNotEmpty() && userName.isNotEmpty()) {
+            if (email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty() ) {
                 if (password == confirmPassword) {
                     firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { signupTask ->
                         if (signupTask.isSuccessful) {
@@ -39,15 +39,15 @@ class SignupActivity : AppCompatActivity() {
                                 val userReference = database.reference.child("Users").child(userId)
                                 val userDetails = HashMap<String, String>()
                                 userDetails["email"] = email
-                                userDetails["username"] = userName
-                                userDetails["phoneNumber"] = phoneNumber
+                             //   userDetails["username"] = userName
+                               // userDetails["phoneNumber"] = phoneNumber
                                 userReference.setValue(userDetails)
                             }
 
                             val intent = Intent(this, UserDetails::class.java)
                             intent.putExtra("email", email)
-                            intent.putExtra("username", userName)
-                            intent.putExtra("phoneNumber", phoneNumber)
+                         //   intent.putExtra("username", userName)
+                            //intent.putExtra("phoneNumber", phoneNumber)
                             startActivity(intent)
                             finish()
                         } else {
