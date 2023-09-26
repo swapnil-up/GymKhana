@@ -74,7 +74,7 @@ class NotificationActivity : AppCompatActivity() {
         }
 
         // Get a reference to the general Notifications node for all users
-        val adminNotificationsRef = database.child("Notifications")
+        val adminNotificationsRef = database.child("Notification")
 
         // Set up a ValueEventListener to listen for changes in the general notifications
         val adminValueEventListener = object : ValueEventListener {
