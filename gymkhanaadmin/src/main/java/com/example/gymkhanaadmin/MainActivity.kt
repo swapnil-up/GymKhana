@@ -19,11 +19,11 @@ class MainActivity : AppCompatActivity() {
 
 
         val imagebtn : ImageButton= findViewById(R.id.userIcon)
-        val attendanceButton: Button = findViewById(R.id.attendance)
+       // val attendanceButton: Button = findViewById(R.id.attendance)
         val notificationbtn: Button=findViewById(R.id.notificationbtn)
         val storeButton:Button=findViewById(R.id.Store)
-        val foodButton :Button= findViewById(R.id.FoodSearch)
-        val mealPlanButton :Button= findViewById(R.id.mealPlan)
+       // val foodButton :Button= findViewById(R.id.FoodSearch)
+       // val mealPlanButton :Button= findViewById(R.id.mealPlan)
         val updateClasses :Button= findViewById(R.id.updateClasses)
         val QRgenerator:Button=findViewById(R.id.QRgenerator)
 

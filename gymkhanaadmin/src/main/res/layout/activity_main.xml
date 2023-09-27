@@ -7,60 +7,27 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/attendance"
-        android:layout_width="85dp"
-        android:layout_height="85dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/calendar"
-        android:backgroundTint="@null"
-        android:contentDescription="click for details"
-        app:layout_constraintStart_toStartOf="@+id/Store"
-        app:layout_constraintTop_toBottomOf="@+id/Store" />
-
-    <Button
         android:id="@+id/notificationbtn"
         android:layout_width="85dp"
         android:layout_height="85dp"
-        android:layout_marginStart="88dp"
+        android:layout_marginTop="64dp"
         android:background="@drawable/notification"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toTopOf="@+id/imageView"
-        app:layout_constraintVertical_bias="1.0"
-        app:tint="@color/secondary" />
-
-    <Button
-        android:id="@+id/FoodSearch"
-        android:layout_width="85dp"
-        android:layout_height="85dp"
-        android:layout_marginStart="88dp"
-        android:background="@drawable/virtual"
-        app:layout_constraintBottom_toBottomOf="@+id/attendance"
-        app:layout_constraintStart_toEndOf="@+id/attendance"
-        app:layout_constraintTop_toTopOf="@+id/attendance"
-        app:layout_constraintVertical_bias="0.0"
-        app:tint="@color/secondary" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="85dp"
-        android:layout_height="85dp"
-        android:layout_marginTop="20dp"
-        android:background="@color/background"
-        app:layout_constraintStart_toStartOf="@+id/attendance"
-        app:layout_constraintTop_toBottomOf="@+id/attendance"
-        app:srcCompat="@drawable/cashlesspayment"
+        app:layout_constraintEnd_toEndOf="@+id/Store"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/Store"
+        app:layout_constraintTop_toBottomOf="@+id/Store"
         app:tint="@color/secondary" />
 
     <Button
         android:id="@+id/Store"
         android:layout_width="85dp"
         android:layout_height="85dp"
-        android:layout_marginTop="84dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="64dp"
         android:background="@drawable/shop"
         android:backgroundTint="@null"
-        app:layout_constraintStart_toStartOf="@+id/userName"
-        app:layout_constraintTop_toBottomOf="@+id/userName" />
+        app:layout_constraintStart_toStartOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/imageView10" />
 
     <Button
         android:id="@+id/QRgenerator"
@@ -82,9 +49,10 @@
 
     <ImageView
         android:id="@+id/imageView10"
-        android:layout_width="450dp"
-        android:layout_height="165dp"
+        android:layout_width="466dp"
+        android:layout_height="190dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.345"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/background2" />
@@ -112,19 +80,9 @@
     </androidx.cardview.widget.CardView>
 
     <ImageView
-        android:id="@+id/imageView8"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="40dp"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView2"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
-        app:layout_constraintTop_toTopOf="@+id/imageView2"
-        app:srcCompat="@drawable/barcodescanner" />
-
-    <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="43dp"
+        android:layout_height="44dp"
         android:layout_marginTop="15dp"
         app:layout_constraintStart_toStartOf="@+id/userName"
         app:layout_constraintTop_toTopOf="parent"
@@ -134,62 +92,79 @@
         android:id="@+id/userName"
         android:layout_width="215dp"
         android:layout_height="47dp"
-        android:text="Samrat Ghimire"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="156dp"
+        android:text="Welcome Admin !"
         android:textSize="24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/cardView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="@+id/cardView"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <TextView
-        android:id="@+id/userId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="2012161"
-        app:layout_constraintEnd_toEndOf="@+id/cardView"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/cardView"
-        app:layout_constraintTop_toBottomOf="@+id/cardView" />
-
-    <Button
-        android:id="@+id/mealPlan"
-        android:layout_width="85dp"
-        android:layout_height="85dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/mealplanner"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/imageView"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
     <Button
         android:id="@+id/updateClasses"
         android:layout_width="85dp"
         android:layout_height="85dp"
+        android:layout_marginStart="88dp"
         android:background="@drawable/classes"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/notificationbtn"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/notificationbtn"
-        app:layout_constraintTop_toBottomOf="@+id/notificationbtn"
-        app:layout_constraintVertical_bias="0.133" />
+        app:layout_constraintBottom_toBottomOf="@+id/notificationbtn"
+        app:layout_constraintStart_toEndOf="@+id/notificationbtn"
+        app:layout_constraintTop_toTopOf="@+id/notificationbtn" />
 
-<!--    <Button-->
-<!--        android:id="@+id/notificationbtn"-->
-<!--        android:layout_width="85dp"-->
-<!--        android:layout_height="85dp"-->
-<!--        android:layout_marginStart="88dp"-->
-<!--        android:background="@drawable/notification"-->
-<!--        app:layout_constraintBottom_toBottomOf="@+id/imageView"-->
-<!--        app:layout_constraintStart_toEndOf="@+id/imageView"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/imageView"-->
-<!--        app:layout_constraintVertical_bias="1.0"-->
-<!--        app:tint="@color/secondary" />-->
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Item"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/Store"
+        app:layout_constraintStart_toStartOf="@+id/Store"
+        app:layout_constraintTop_toBottomOf="@+id/Store" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="QR Generator"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/QRgenerator"
+        app:layout_constraintStart_toStartOf="@+id/QRgenerator"
+        app:layout_constraintTop_toBottomOf="@+id/QRgenerator" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send Notification"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/notificationbtn"
+        app:layout_constraintStart_toStartOf="@+id/notificationbtn"
+        app:layout_constraintTop_toBottomOf="@+id/notificationbtn" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Class"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/updateClasses"
+        app:layout_constraintHorizontal_bias="0.518"
+        app:layout_constraintStart_toStartOf="@+id/updateClasses"
+        app:layout_constraintTop_toBottomOf="@+id/updateClasses" />
+
+    <!--    <Button-->
+    <!--        android:id="@+id/notificationbtn"-->
+    <!--        android:layout_width="85dp"-->
+    <!--        android:layout_height="85dp"-->
+    <!--        android:layout_marginStart="88dp"-->
+    <!--        android:background="@drawable/notification"-->
+    <!--        app:layout_constraintBottom_toBottomOf="@+id/imageView"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/imageView"-->
+    <!--        app:layout_constraintTop_toTopOf="@+id/imageView"-->
+    <!--        app:layout_constraintVertical_bias="1.0"-->
+    <!--        app:tint="@color/secondary" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
