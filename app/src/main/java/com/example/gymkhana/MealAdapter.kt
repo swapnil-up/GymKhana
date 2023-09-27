@@ -68,10 +68,10 @@ class MealAdapter(
             readyInMinutesTextView.text = itemView.context.getString(R.string.ready_in_minutes, meal.readyInMinutes)
             servingsTextView.text = itemView.context.getString(R.string.servings, meal.servings)
             sourceUrlTextView.text = meal.sourceUrl
-            caloriesTextView.text = itemView.context.getString(R.string.calories, meal.nutrition?.calories)
-            carbohydratesTextView.text = itemView.context.getString(R.string.carbohydrates, meal.nutrition?.carbohydrates)
-            fatTextView.text = itemView.context.getString(R.string.fat, meal.nutrition?.fat)
-            proteinTextView.text = itemView.context.getString(R.string.protein, meal.nutrition?.protein)
+//            caloriesTextView.text = itemView.context.getString(R.string.calories, meal.nutrition?.calories)
+//            carbohydratesTextView.text = itemView.context.getString(R.string.carbohydrates, meal.nutrition?.carbohydrates)
+//            fatTextView.text = itemView.context.getString(R.string.fat, meal.nutrition?.fat)
+//            proteinTextView.text = itemView.context.getString(R.string.protein, meal.nutrition?.protein)
         }
     }
 
