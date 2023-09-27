@@ -6,24 +6,75 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.provider.Settings
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import org.json.JSONObject
+import java.util.UUID
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onNewToken(token: String) {
         // Handle the new token (e.g., send it to your server)
+        obtainAndSaveFCMToken()
+
         // You can also save the token locally for later use
         // Log the token to the console for testing purposes
         Log.d("FCM Token", token)
+    }
+
+    private fun obtainAndSaveFCMToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.i("FCM_TOKEN", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+
+            // Get the new FCM registration token
+            val token = task.result
+
+            // Save the token to the Firebase RTDB
+            saveTokenToFirebase(token)
+        })
+    }
+
+    fun getDeviceId(context: Context): String {
+        // Use Android device ID as a unique identifier for the device.
+        val androidId = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+        return androidId
+    }
+
+    private fun saveTokenToFirebase(token: String) {
+        // Get a reference to the Firebase Realtime Database
+        val database = FirebaseDatabase.getInstance("https://gymkhana-5560f-default-rtdb.asia-southeast1.firebasedatabase.app")
+
+        // Get a reference to the "FCM Tokens" node in the database
+        val tokensRef = database.reference.child("FCM Tokens")
+
+        // Use push to generate a unique key for each token
+        val tokenKey = tokensRef.push().key
+
+        // Check if the key is not null (just to be safe)
+        if (tokenKey != null) {
+            // Set the FCM token as the value under the generated key
+            tokensRef.child(tokenKey).setValue(token)
+                .addOnSuccessListener {
+                    // Token successfully updated in the database
+                    Log.d("FCM_TOKEN", "Token updated in the database: $token")
+                }
+                .addOnFailureListener { e ->
+                    // Handle the error if the token update fails
+                    Log.e("FCM_TOKEN", "Error updating token in the database: $e")
+                }
+        }
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
