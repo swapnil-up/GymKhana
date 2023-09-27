@@ -2,5 +2,4 @@
 <resources>
     <item name="dateTextView" type="id" />
     <item name="sendNotificationButton" type="id" />
-    <item name="textView3" type="id">store name</item>
 </resources>
