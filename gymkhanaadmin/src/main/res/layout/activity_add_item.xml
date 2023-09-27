@@ -7,44 +7,65 @@
     tools:context=".AddItemActivity">
 
     <!-- activity_add_item.xml -->
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="16dp">
+        tools:layout_editor_absoluteX="150dp"
+        tools:layout_editor_absoluteY="131dp">
 
 
         <EditText
             android:id="@+id/itemNameEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Item Name" />
+            android:layout_width="380dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="56dp"
+            android:background="@drawable/rectangle_user_details"
+            android:hint="Item Name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/priceEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="380dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="28dp"
+            android:background="@drawable/rectangle_user_details"
             android:hint="Price"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal"
+            app:layout_constraintEnd_toEndOf="@+id/itemNameEditText"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/itemNameEditText"
+            app:layout_constraintTop_toBottomOf="@+id/itemNameEditText" />
 
         <EditText
             android:id="@+id/imageURLEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="380dp"
+            android:layout_height="70dp"
+            android:layout_marginTop="28dp"
+            android:background="@drawable/rectangle_user_details"
             android:focusable="false"
+            android:hint="Image URL"
             android:inputType="none"
-            android:hint="Image URL" />
+            app:layout_constraintEnd_toEndOf="@+id/priceEditText"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/priceEditText"
+            app:layout_constraintTop_toBottomOf="@+id/priceEditText" />
 
         <Button
             android:id="@+id/capturePhotoButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="258dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/buttoncolor"
             android:text="Capture Photo and Add to Store"
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp" />
+            app:layout_constraintEnd_toEndOf="@+id/imageURLEditText"
+            app:layout_constraintHorizontal_bias="0.491"
+            app:layout_constraintStart_toStartOf="@+id/imageURLEditText"
+            app:layout_constraintTop_toBottomOf="@+id/imageURLEditText" />
 
-    </LinearLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
