@@ -41,7 +41,7 @@ class FirebaseMessagingService : FirebaseMessagingService() {
         val notificationSoundUri =
             RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, ADMIN_CHANNEL_ID)
-            .setSmallIcon(R.drawable.notify_icon)
+            .setSmallIcon(R.drawable.notification_small)
             .setLargeIcon(largeIcon)
             .setContentTitle(remoteMessage.data["title"])
             .setContentText(remoteMessage.data["message"])

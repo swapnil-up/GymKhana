@@ -29,6 +29,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         super.onMessageReceived(remoteMessage)
 
+        Log.d("MyFirebaseMessagingService", "Received message: $remoteMessage")
+
         // Handle the data payload when the app is in the foreground
         if (remoteMessage.data.isNotEmpty()) {
             // Retrieve the data payload
@@ -97,7 +99,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             .setContentTitle(title)
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setSmallIcon(R.drawable.notification) // Set a valid small icon for the notification
+            .setSmallIcon(R.drawable.notification_small) // Set a valid small icon for the notification
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
 

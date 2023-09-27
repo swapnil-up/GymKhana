@@ -80,5 +80,15 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.8'
     implementation 'com.khalti:khalti-android:2.01.00' // Use the latest version
 
+    configurations.all {
+        resolutionStrategy {
+            force 'com.google.api.grpc:proto-google-common-protos:2.3.2'
+            force 'com.google.firebase:protolite-well-known-types:18.0.0'
+        }
+    }
 
+    implementation('com.google.firebase:firebase-database-ktx:20.1.0') {
+        exclude group: 'com.google.api.grpc', module: 'proto-google-common-protos'
+        exclude group: 'com.google.firebase', module: 'protolite-well-known-types'
+    }
 }
