@@ -1,107 +1,152 @@
 package com.example.gymkhanaadmin.classes
 
-import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.example.gymkhanaadmin.R
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import java.io.ByteArrayOutputStream
+import java.util.UUID
 
 class AddClasses : AppCompatActivity() {
-//    val PICK_IMAGE_REQUEST = 1
-    var PICK_IMAGE = 0
 
-    lateinit var addClassImg: ImageView
-    lateinit var addClassName: EditText
-    lateinit var addClassDescription: EditText
-    lateinit var addClassBtn: Button
+    private lateinit var classNameEditText: EditText
+    private lateinit var classImageView: ImageView
+    private lateinit var addClassButton: Button
 
-    private var name: String = ""
-    private var discription: String = ""
-    private var downloadUrl = ""
+    private lateinit var storageRef: StorageReference
+    private lateinit var databaseRef: DatabaseReference
 
+    private var imageBitmap: Bitmap? = null
 
-
-    private val contract = registerForActivityResult(ActivityResultContracts.GetContent()){
-        addClassImg.setImageURI(it)
-        PICK_IMAGE = 1
+    private val getImage = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            val data: Intent? = result.data
+            data?.data?.let { imageUri ->
+                try {
+                    val imageStream = contentResolver.openInputStream(imageUri)
+                    imageBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, imageUri)
+                    classImageView.setImageBitmap(imageBitmap)
+                } catch (e: Exception) {
+                    Toast.makeText(this, "Error loading image", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_classes)
 
+        classNameEditText = findViewById(R.id.addClassName)
+        classImageView = findViewById(R.id.addClassImg)
+        addClassButton = findViewById(R.id.addClassBtn)
 
-        addClassImg = findViewById(R.id.addClassImg)
-        addClassName = findViewById(R.id.addClassName)
-        addClassDescription = findViewById(R.id.addClassDescription)
-        addClassBtn = findViewById(R.id.addClassBtn)
+        // Initialize Firebase Storage
+        val storage = FirebaseStorage.getInstance()
+        storageRef = storage.reference.child("class_images")
 
+        // Initialize Firebase Realtime Database with your database URL
+        val database = FirebaseDatabase.getInstance("https://gymkhana-5560f-default-rtdb.asia-southeast1.firebasedatabase.app")
 
+        // Get a reference to the "classes" node in the database
+        databaseRef = database.reference.child("classes")
 
-
-        addClassImg.setOnClickListener {
-            contract.launch("image/*")
+        classImageView.setOnClickListener {
+            takePicture()
         }
 
-        addClassBtn.setOnClickListener{
-            checkValidation()
+        addClassButton.setOnClickListener {
+            addClass()
         }
-
     }
 
-    private fun checkValidation() {
-        name = addClassName.text.trim().toString()
-        discription = addClassDescription.text.trim().toString()
+//    private fun takePicture() {
+//        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+//        getImage.launch(takePictureIntent)
+//
+//
+//    }
 
-        if (name.isEmpty()){
-            addClassName.error = "Name is empty."
-            addClassName.requestFocus()
-        }else if (discription.isEmpty()){
-            addClassDescription.error = "Description is empty."
-            addClassName.requestFocus()
-        }else if (PICK_IMAGE==0){
-            Toast.makeText(applicationContext, "Add Image", Toast.LENGTH_SHORT).show()
-        }
+    private fun takePicture() {
+        val options = arrayOf("Take Photo", "Choose from Gallery", "Cancel")
 
+        AlertDialog.Builder(this)
+            .setTitle("Choose an option")
+            .setItems(options) { dialog, which ->
+                when (which) {
+                    0 -> dispatchTakePictureIntent()
+                    1 -> dispatchPickImageIntent()
+                    2 -> dialog.dismiss()
+                }
+            }
+            .show()
+    }
+
+    private fun dispatchTakePictureIntent() {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        getImage.launch(takePictureIntent)
+    }
+
+    private fun dispatchPickImageIntent() {
+        val pickImageIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        getImage.launch(pickImageIntent)
     }
 
 
-//    private fun openGallery() {
-//        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-//        startActivityForResult(intent, PICK_IMAGE_REQUEST)
-//    }
-//
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null) {
-//            val selectedImageUri: Uri? = data.data
-//            val bitmap: Bitmap? = getBitmapFromUri(selectedImageUri)
-//            addClassImg.setImageBitmap(bitmap)
-//            // Handle the selected image URI here
-//            // You can pass it to an image upload function or perform any other operations
-//        }
-//
-//    }
-//    private fun getBitmapFromUri(uri: Uri?): Bitmap? {
-//        return try {
-//            val inputStream = contentResolver.openInputStream(uri!!)
-//            BitmapFactory.decodeStream(inputStream)
-//        } catch (e: Exception) {
-//            e.printStackTrace()
-//            null
-//        }
-//    }
+    private fun addClass() {
+        val className = classNameEditText.text.toString().trim()
+
+        if (className.isEmpty() || imageBitmap == null) {
+            Toast.makeText(this, "Please fill in the class name and select an image", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Generate a random UUID for the image filename
+        val imageFileName = "${UUID.randomUUID()}.jpg"
+        val imageRef = storageRef.child(imageFileName)
+
+        // Convert the image to bytes
+        val baos = ByteArrayOutputStream()
+        imageBitmap?.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val imageData = baos.toByteArray()
+
+        // Upload the image to Firebase Storage
+        imageRef.putBytes(imageData)
+            .addOnSuccessListener {
+                // Get the download URL for the uploaded image
+                imageRef.downloadUrl.addOnSuccessListener { imageUrl ->
+                    // Create a Class object
+                    val gymClass = GymClass(className, imageUrl.toString())
+
+                    // Upload class data to Firebase Realtime Database
+                    val classKey = databaseRef.push().key
+                    if (classKey != null) {
+                        databaseRef.child(classKey).setValue(gymClass)
+                            .addOnSuccessListener {
+                                Toast.makeText(this, "Class added successfully", Toast.LENGTH_SHORT).show()
+                                finish()
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(this, "Failed to add class to the database", Toast.LENGTH_SHORT).show()
+                            }
+                    }
+                }
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "Failed to upload image", Toast.LENGTH_SHORT).show()
+            }
+    }
 }
