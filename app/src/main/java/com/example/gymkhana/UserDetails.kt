@@ -14,6 +14,7 @@ import com.google.firebase.storage.StorageReference
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 
+@Suppress("DEPRECATION")
 class UserDetails : AppCompatActivity() {
     private lateinit var binding: ActivityUserDetailsBinding
     private lateinit var database: FirebaseDatabase
