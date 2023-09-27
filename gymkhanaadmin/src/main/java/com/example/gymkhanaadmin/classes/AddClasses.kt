@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.gymkhanaadmin.R
 import com.google.firebase.database.DatabaseReference
@@ -72,10 +73,38 @@ class AddClasses : AppCompatActivity() {
         }
     }
 
+//    private fun takePicture() {
+//        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+//        getImage.launch(takePictureIntent)
+//
+//
+//    }
+
     private fun takePicture() {
+        val options = arrayOf("Take Photo", "Choose from Gallery", "Cancel")
+
+        AlertDialog.Builder(this)
+            .setTitle("Choose an option")
+            .setItems(options) { dialog, which ->
+                when (which) {
+                    0 -> dispatchTakePictureIntent()
+                    1 -> dispatchPickImageIntent()
+                    2 -> dialog.dismiss()
+                }
+            }
+            .show()
+    }
+
+    private fun dispatchTakePictureIntent() {
         val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         getImage.launch(takePictureIntent)
     }
+
+    private fun dispatchPickImageIntent() {
+        val pickImageIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        getImage.launch(pickImageIntent)
+    }
+
 
     private fun addClass() {
         val className = classNameEditText.text.toString().trim()
