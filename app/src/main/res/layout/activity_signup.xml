@@ -51,7 +51,6 @@
             android:id="@+id/signup_email"
             android:layout_width="350dp"
             android:layout_height="60dp"
-            android:layout_marginStart="32dp"
             android:layout_marginBottom="34dp"
             android:autofillHints=""
             android:background="@drawable/lavender_border"
@@ -61,6 +60,7 @@
             android:padding="8dp"
             android:textColor="@color/grey"
             app:layout_constraintBottom_toTopOf="@+id/signup_password"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:ignore="HardcodedText" />
 
@@ -68,7 +68,6 @@
             android:id="@+id/signup_password"
             android:layout_width="350dp"
             android:layout_height="60dp"
-            android:layout_marginStart="32dp"
             android:layout_marginBottom="28dp"
             android:autofillHints=""
             android:background="@drawable/lavender_border"
@@ -79,13 +78,13 @@
             android:padding="8dp"
             android:textColor="@color/grey"
             app:layout_constraintBottom_toTopOf="@+id/signup_confirm"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <EditText
             android:id="@+id/signup_confirm"
             android:layout_width="350dp"
             android:layout_height="60dp"
-            android:layout_marginStart="32dp"
             android:layout_marginBottom="29dp"
             android:autofillHints=""
             android:background="@drawable/lavender_border"
@@ -96,19 +95,20 @@
             android:padding="8dp"
             android:textColor="@color/grey"
             app:layout_constraintBottom_toTopOf="@+id/signup_button"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
             android:id="@+id/signup_button"
             android:layout_width="350dp"
             android:layout_height="51dp"
-            android:layout_marginStart="32dp"
             android:layout_marginBottom="28dp"
             android:background="@drawable/buttoncolor"
             android:text="Sign Up"
             android:textSize="18sp"
             app:cornerRadius="30dp"
             app:layout_constraintBottom_toTopOf="@+id/loginRedirectText"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView

@@ -88,14 +88,6 @@ class MainActivity : AppCompatActivity() {
                             binding.lname.text = lastName
                         }
                     }
-
-                    fun onCancelled(error: DatabaseError) {
-                        Toast.makeText(
-                            this@MainActivity,
-                            "Failed to retrieve user details",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
