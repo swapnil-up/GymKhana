@@ -25,6 +25,8 @@ class AddClasses : AppCompatActivity() {
     private lateinit var classNameEditText: EditText
     private lateinit var classImageView: ImageView
     private lateinit var addClassButton: Button
+    private lateinit var addClassDescription: EditText
+
 
     private lateinit var storageRef: StorageReference
     private lateinit var databaseRef: DatabaseReference
@@ -53,8 +55,10 @@ class AddClasses : AppCompatActivity() {
         classNameEditText = findViewById(R.id.addClassName)
         classImageView = findViewById(R.id.addClassImg)
         addClassButton = findViewById(R.id.addClassBtn)
+        addClassDescription = findViewById(R.id.addClassDescription)
 
-        // Initialize Firebase Storage
+
+            // Initialize Firebase Storage
         val storage = FirebaseStorage.getInstance()
         storageRef = storage.reference.child("class_images")
 
@@ -108,9 +112,10 @@ class AddClasses : AppCompatActivity() {
 
     private fun addClass() {
         val className = classNameEditText.text.toString().trim()
+        val classDesc = addClassDescription.text.toString().trim()
 
-        if (className.isEmpty() || imageBitmap == null) {
-            Toast.makeText(this, "Please fill in the class name and select an image", Toast.LENGTH_SHORT).show()
+        if (className.isEmpty() || imageBitmap == null||classDesc.isEmpty()) {
+            Toast.makeText(this, "Please fill in the class name, description and select an image", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -129,12 +134,12 @@ class AddClasses : AppCompatActivity() {
                 // Get the download URL for the uploaded image
                 imageRef.downloadUrl.addOnSuccessListener { imageUrl ->
                     // Create a Class object
-                    val gymClass = GymClass(className, imageUrl.toString())
+                    val classData = ClassData(className,classDesc, imageUrl.toString())
 
                     // Upload class data to Firebase Realtime Database
                     val classKey = databaseRef.push().key
                     if (classKey != null) {
-                        databaseRef.child(classKey).setValue(gymClass)
+                        databaseRef.child(classKey).setValue(classData)
                             .addOnSuccessListener {
                                 Toast.makeText(this, "Class added successfully", Toast.LENGTH_SHORT).show()
                                 finish()

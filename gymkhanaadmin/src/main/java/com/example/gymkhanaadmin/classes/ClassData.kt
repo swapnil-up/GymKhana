@@ -1,11 +1,6 @@
 package com.example.gymkhanaadmin.classes
 
-import java.text.SimpleDateFormat
+class ClassData(val className: String,val classDesc: String, val imageUrl: String)
 
-class ClassData {
-    private var name: String = ""
-    private var description: String = ""
-    private var image: String = ""
-    private var key: String = ""
 
-}
+
