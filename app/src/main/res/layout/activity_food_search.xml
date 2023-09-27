@@ -8,37 +8,57 @@
 
     <AutoCompleteTextView
         android:id="@+id/nutritionalSearchAutoComplete"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:layout_width="375dp"
+        android:layout_height="73dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rectangle_user_details"
         android:hint="Search for items"
-        android:background="@color/primary"
-        app:layout_constraintTop_toTopOf="parent"
+
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.461"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/nutritionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/buttoncolor"
+
         android:text="Search"
-        app:layout_constraintTop_toBottomOf="@+id/nutritionalSearchAutoComplete"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/nutritionalSearchAutoComplete" />
 
     <ScrollView
+        style="@android:style/Widget.DeviceDefault.Light.ScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:fillViewport="false"
+        android:focusable="auto"
+        android:focusableInTouchMode="true"
+        android:scrollbarStyle="insideOverlay"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/nutritionButton"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintVertical_bias="1.0"
+        tools:visibility="visible">
 
         <TextView
             android:id="@+id/nutritionalResultsTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
             android:enabled="false"
-            android:padding="16dp" />
+            android:padding="16dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+
+            />
 
     </ScrollView>
 

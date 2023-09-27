@@ -128,10 +128,19 @@ class CalendarAdapter(
     }
 
 
-
     private fun toggleDateSelection(date: Date) {
         val dateString = getDateString(date)
         val attendanceStatus = attendanceData[dateString]
+
+        // Get the current real-time date
+        val currentDate = Calendar.getInstance().time
+        val currentDateString = getDateString(currentDate)
+
+        if (date.after(currentDate)) {
+            // The selected date is in the future, do not allow changes
+            // You can display a message to inform the user if needed
+            return
+        }
 
         when (attendanceStatus) {
             null -> attendanceData[dateString] = 1 // Green (present) on first tap
@@ -141,6 +150,9 @@ class CalendarAdapter(
 
         notifyDataSetChanged()
     }
+
+
+
 
     private fun updateTotalDaysAndStreak() {
         val totalDays = attendanceData.count { it.value == 1 } // Count the days with attendance status 1 (green)
@@ -156,19 +168,37 @@ class CalendarAdapter(
         var longestStreak = 0
 
         val sortedDates = attendanceData.keys.sorted()
-        for (i in 0 until sortedDates.size) {
-            val currentDate = sortedDates[i]
-            if (attendanceData[currentDate] == 1) { // Check if attendance status is 1 (green)
-                currentStreak++
+        var lastDate: String? = null
+
+        for (date in sortedDates) {
+            if (attendanceData[date] == 1) { // Check if attendance status is 1 (green)
+                if (lastDate != null && isConsecutiveDates(lastDate, date)) {
+                    currentStreak++
+                } else {
+                    currentStreak = 1
+                }
                 if (currentStreak > longestStreak) {
                     longestStreak = currentStreak
                 }
-            } else {
-                currentStreak = 0
             }
+            lastDate = date
         }
 
         return longestStreak
+    }
+
+    private fun isConsecutiveDates(date1: String, date2: String): Boolean {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val cal1 = Calendar.getInstance()
+        val cal2 = Calendar.getInstance()
+        cal1.time = dateFormat.parse(date1) ?: Date()
+        cal2.time = dateFormat.parse(date2) ?: Date()
+
+        // Calculate the difference between the two dates
+        val diffInMillis = cal2.timeInMillis - cal1.timeInMillis
+        val oneDayInMillis = 24 * 60 * 60 * 1000 // Milliseconds in a day
+
+        return diffInMillis <= oneDayInMillis
     }
 
 

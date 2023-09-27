@@ -58,20 +58,20 @@ class MealAdapter(
         private val readyInMinutesTextView: TextView = itemView.findViewById(R.id.textView_readyInMinutes)
         private val servingsTextView: TextView = itemView.findViewById(R.id.textView_servings)
         private val sourceUrlTextView: TextView = itemView.findViewById(R.id.textView_sourceUrl)
-        private val caloriesTextView: TextView = itemView.findViewById(R.id.textView_calories)
-        private val carbohydratesTextView: TextView = itemView.findViewById(R.id.textView_carbohydrates)
-        private val fatTextView: TextView = itemView.findViewById(R.id.textView_fat)
-        private val proteinTextView: TextView = itemView.findViewById(R.id.textView_protein)
+      //  private val caloriesTextView: TextView = itemView.findViewById(R.id.textView_calories)
+      //  private val carbohydratesTextView: TextView = itemView.findViewById(R.id.textView_carbohydrates)
+      //  private val fatTextView: TextView = itemView.findViewById(R.id.textView_fat)
+     //   private val proteinTextView: TextView = itemView.findViewById(R.id.textView_protein)
 
         fun bind(meal: Meal) {
             titleTextView.text = meal.title
             readyInMinutesTextView.text = itemView.context.getString(R.string.ready_in_minutes, meal.readyInMinutes)
             servingsTextView.text = itemView.context.getString(R.string.servings, meal.servings)
             sourceUrlTextView.text = meal.sourceUrl
-            caloriesTextView.text = itemView.context.getString(R.string.calories, meal.nutrition?.calories)
-            carbohydratesTextView.text = itemView.context.getString(R.string.carbohydrates, meal.nutrition?.carbohydrates)
-            fatTextView.text = itemView.context.getString(R.string.fat, meal.nutrition?.fat)
-            proteinTextView.text = itemView.context.getString(R.string.protein, meal.nutrition?.protein)
+//            caloriesTextView.text = itemView.context.getString(R.string.calories, meal.nutrition?.calories)
+//            carbohydratesTextView.text = itemView.context.getString(R.string.carbohydrates, meal.nutrition?.carbohydrates)
+//            fatTextView.text = itemView.context.getString(R.string.fat, meal.nutrition?.fat)
+//            proteinTextView.text = itemView.context.getString(R.string.protein, meal.nutrition?.protein)
         }
     }
 
