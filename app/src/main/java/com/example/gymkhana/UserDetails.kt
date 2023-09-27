@@ -1,6 +1,7 @@
 package com.example.gymkhana
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -102,7 +103,7 @@ class UserDetails : AppCompatActivity() {
         val firstName = binding.nameEditText.text.toString().trim()
         val lastName = binding.emailEditText.text.toString().trim()
         val age = binding.phoneEditText.text.toString().trim()
-        val number =binding.phoneEditText2.text.toString().trim()
+        val number = binding.phoneEditText2.text.toString().trim()
 
         if (firstName.isNotEmpty() && lastName.isNotEmpty() && age.isNotEmpty()) {
             val userReference: DatabaseReference = database.reference.child("Users").child(userId)
@@ -130,6 +131,15 @@ class UserDetails : AppCompatActivity() {
         imageRef.putFile(selectedImageUri)
             .addOnSuccessListener { taskSnapshot ->
                 Toast.makeText(this, "User photo uploaded successfully", Toast.LENGTH_SHORT).show()
+
+                // Save the photo URL to SharedPreferences
+                val sharedPreferences = getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
+                val editor = sharedPreferences.edit()
+                imageRef.downloadUrl.addOnSuccessListener { uri ->
+                    val photoUrl = uri.toString()
+                    editor.putString("userPhotoUrl", photoUrl)
+                    editor.apply()
+                }
             }
             .addOnFailureListener { exception ->
                 Toast.makeText(this, "Failed to upload user photo", Toast.LENGTH_SHORT).show()
