@@ -58,10 +58,10 @@ class MealAdapter(
         private val readyInMinutesTextView: TextView = itemView.findViewById(R.id.textView_readyInMinutes)
         private val servingsTextView: TextView = itemView.findViewById(R.id.textView_servings)
         private val sourceUrlTextView: TextView = itemView.findViewById(R.id.textView_sourceUrl)
-        private val caloriesTextView: TextView = itemView.findViewById(R.id.textView_calories)
-        private val carbohydratesTextView: TextView = itemView.findViewById(R.id.textView_carbohydrates)
-        private val fatTextView: TextView = itemView.findViewById(R.id.textView_fat)
-        private val proteinTextView: TextView = itemView.findViewById(R.id.textView_protein)
+      //  private val caloriesTextView: TextView = itemView.findViewById(R.id.textView_calories)
+      //  private val carbohydratesTextView: TextView = itemView.findViewById(R.id.textView_carbohydrates)
+      //  private val fatTextView: TextView = itemView.findViewById(R.id.textView_fat)
+     //   private val proteinTextView: TextView = itemView.findViewById(R.id.textView_protein)
 
         fun bind(meal: Meal) {
             titleTextView.text = meal.title

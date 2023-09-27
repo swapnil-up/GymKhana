@@ -8,8 +8,8 @@
 
     <AutoCompleteTextView
         android:id="@+id/nutritionalSearchAutoComplete"
-        android:layout_width="398dp"
-        android:layout_height="57dp"
+        android:layout_width="375dp"
+        android:layout_height="73dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/rectangle_user_details"
         android:hint="Search for items"

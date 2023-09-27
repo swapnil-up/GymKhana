@@ -8,8 +8,22 @@
 
     <com.khalti.widget.KhaltiButton
         android:id="@+id/khalti_button"
+        android:layout_width="148dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="160dp"
+        app:khalti_button_style="khalti"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:khalti_button_style="khalti" />
+        android:layout_marginTop="92dp"
+        android:text="Payment History coming soon..."
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/khalti_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
