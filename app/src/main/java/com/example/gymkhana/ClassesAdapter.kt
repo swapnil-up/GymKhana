@@ -13,8 +13,9 @@ import com.squareup.picasso.Picasso
 
 class ClassesAdapter(
     private var classesList: List<GymClass>,
-    private val onJoinClick: (Int) -> Unit,
-    private val onLeaveClick: (Int) -> Unit
+    private val onJoinClick: (String) -> Unit,
+    private val onLeaveClick: (String) -> Unit,
+    private var userJoinedClasses: List<String> = emptyList()
 ) : RecyclerView.Adapter<ClassesAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -36,26 +37,49 @@ class ClassesAdapter(
         holder.classDescription.text = gymClass.classDesc
         Picasso.get()
             .load(gymClass.imageUrl)
-            .placeholder(R.drawable.notification) // Placeholder image
-            .error(R.drawable.bg_no_color) // Error image (optional)
+            .placeholder(R.drawable.notification)
+            .error(R.drawable.bg_no_color)
             .into(holder.classImageView)
 
-        // Set click listeners for the "Join" and "Leave" buttons
-        holder.btnJoin.setOnClickListener { onJoinClick(position) }
-        holder.btnLeave.setOnClickListener { onLeaveClick(position) }
+        // Set click listeners for the "Join" and "Leave" buttons with class ID
+        val classId = gymClass.classId
+
+        // Check if the user has already joined this class and update button visibility accordingly
+        if (userJoinedClasses.contains(classId)) {
+            holder.btnJoin.visibility = View.GONE
+            holder.btnLeave.visibility = View.VISIBLE
+        } else {
+            holder.btnJoin.visibility = View.VISIBLE
+            holder.btnLeave.visibility = View.GONE
+        }
+
+        // Set click listeners for the buttons
+        holder.btnJoin.setOnClickListener {
+            onJoinClick(classId)
+            holder.btnJoin.visibility = View.GONE
+            holder.btnLeave.visibility = View.VISIBLE
+        }
+        holder.btnLeave.setOnClickListener {
+            onLeaveClick(classId)
+            holder.btnJoin.visibility = View.VISIBLE
+            holder.btnLeave.visibility = View.GONE
+        }
     }
 
     override fun getItemCount(): Int {
         return classesList.size
     }
 
-    fun updateData(newClassesList: List<GymClass>) {
-        classesList = newClassesList
-        notifyDataSetChanged()
-    }
 
     fun onDataChanged(newClassesList: List<GymClass>) {
         classesList = newClassesList
         notifyDataSetChanged()
     }
+
+    // Function to update the user's joined classes
+    fun updateUserJoinedClasses(userJoinedClasses: List<String>) {
+        this.userJoinedClasses = userJoinedClasses
+        notifyDataSetChanged() // Notify the adapter that the data has changed
+    }
+
 }
