@@ -59,8 +59,6 @@ class MainActivity : AppCompatActivity() {
         val mealPlanButton: Button = binding.mealPlan
         val imageButton: ImageButton = binding.logoutbutton
         val scanButton: ImageButton = binding.scanButton
-        val payButton: Button = binding.payment
-        val joinClassBtn:Button=binding.JoinClassBtn
 
         val userId = firebaseAuth.currentUser?.uid
         if (userId != null) {
@@ -89,6 +87,14 @@ class MainActivity : AppCompatActivity() {
                             binding.lname.text = lastName
                         }
                     }
+
+                    fun onCancelled(error: DatabaseError) {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Failed to retrieve user details",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -108,16 +114,6 @@ class MainActivity : AppCompatActivity() {
 
         imagebtn.setOnClickListener {
             val i = Intent(this, UserDetails::class.java)
-            startActivity(i)
-        }
-
-        payButton.setOnClickListener {
-            val i = Intent(this, PaymentActivity::class.java)
-            startActivity(i)
-        }
-
-        joinClassBtn.setOnClickListener {
-            val i = Intent(this, JoinClassesActivity::class.java)
             startActivity(i)
         }
 
@@ -200,12 +196,6 @@ class MainActivity : AppCompatActivity() {
                         val newNotificationRef = userNotificationsRef.push()
                         newNotificationRef.child("title").setValue(currentDateTime)
                         newNotificationRef.child("message").setValue(scannedData)
-
-                        // Create a new notification entry in the "Notifications" node for all users
-                        val notificationsRef: DatabaseReference = database.reference.child("Notifications")
-                        val newAdminNotificationRef = notificationsRef.push()
-                        newAdminNotificationRef.child("title").setValue(currentDateTime)
-                        newAdminNotificationRef.child("message").setValue(scannedData)
                     }
                     .addOnFailureListener { exception ->
                         Toast.makeText(this, "Failed to store scanned data", Toast.LENGTH_SHORT).show()
