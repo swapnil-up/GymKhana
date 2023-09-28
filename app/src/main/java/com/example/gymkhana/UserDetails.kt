@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.text.InputFilter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.gymkhana.databinding.ActivityUserDetailsBinding
@@ -83,6 +84,9 @@ class UserDetails : AppCompatActivity() {
             startActivity(loginIntent)
             finish()
         }
+        // Set input filters for age and number EditText fields
+        binding.phoneEditText.filters = arrayOf(InputFilter.LengthFilter(2))
+        binding.phoneEditText2.filters = arrayOf(InputFilter.LengthFilter(10))
     }
 
     private fun openImageChooser() {
