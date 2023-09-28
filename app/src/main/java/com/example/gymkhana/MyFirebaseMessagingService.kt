@@ -25,7 +25,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         // Handle the new token (e.g., send it to your server)
         obtainAndSaveFCMToken()
-
         // You can also save the token locally for later use
         // Log the token to the console for testing purposes
         Log.d("FCM Token", token)
