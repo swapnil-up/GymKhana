@@ -15,6 +15,7 @@ class JoinClassesActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var classesAdapter: ClassesAdapter
     private lateinit var databaseRef: DatabaseReference
+    private lateinit var joinedClassesRef: DatabaseReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,87 +27,95 @@ class JoinClassesActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = classesAdapter
 
-        // Initialize Firebase Realtime Database reference
-        databaseRef = FirebaseDatabase.getInstance("https://gymkhana-5560f-default-rtdb.asia-southeast1.firebasedatabase.app")
-            .getReference("classes")
+        // Initialize Firebase Realtime Database reference for classes and joined classes
+        val database = FirebaseDatabase.getInstance("https://gymkhana-5560f-default-rtdb.asia-southeast1.firebasedatabase.app")
+        databaseRef = database.getReference("classes")
+        joinedClassesRef = database.getReference("JoinedClasses")
 
-        // Load classes data into the adapter
-        databaseRef.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val classesList = mutableListOf<GymClass>()
+        // Get the current user's ID
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        if (userId != null) {
+            // Load classes data into the adapter
+            databaseRef.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val classesList = mutableListOf<GymClass>()
 
-                for (classSnapshot in snapshot.children) {
-                    val gymClass = classSnapshot.getValue(GymClass::class.java)
-                    gymClass?.let {
-                        classesList.add(it)
+                    for (classSnapshot in snapshot.children) {
+                        val gymClass = classSnapshot.getValue(GymClass::class.java)
+                        gymClass?.let {
+                            it.classId = classSnapshot.key.toString() // Set the classId property
+                            classesList.add(it)                        }
+                    }
+
+                    // Update the RecyclerView adapter with the loaded data
+                    classesAdapter.onDataChanged(classesList)
+
+                    // Toggle visibility of RecyclerView and "No Data" view
+                    if (classesList.isEmpty()) {
+                        recyclerView.visibility = View.GONE
+                        findViewById<View>(R.id.clsNoData).visibility = View.VISIBLE
+                    } else {
+                        recyclerView.visibility = View.VISIBLE
+                        findViewById<View>(R.id.clsNoData).visibility = View.GONE
                     }
                 }
 
-                // Update the RecyclerView adapter with the loaded data
-                classesAdapter.onDataChanged(classesList)
-
-                // Toggle visibility of RecyclerView and "No Data" view
-                if (classesList.isEmpty()) {
-                    recyclerView.visibility = View.GONE
-                    findViewById<View>(R.id.clsNoData).visibility = View.VISIBLE
-                } else {
-                    recyclerView.visibility = View.VISIBLE
-                    findViewById<View>(R.id.clsNoData).visibility = View.GONE
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("UserClasses", "Error loading classes data: ${error.message}")
                 }
-            }
+            })
 
-            val user = FirebaseAuth.getInstance().currentUser
-            val userId = user?.uid
+            // Check if the user is already joined any classes
+            val userJoinedClassesQuery = joinedClassesRef.child(userId)
 
-            // Assuming you have a reference to the database
-            val userClassesRef = FirebaseDatabase.getInstance()
-                .getReference("user_classes/$userId/joined_classes")
+            userJoinedClassesQuery.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val userJoinedClasses = snapshot.children.map { it.key ?: "" }
 
-            override fun onCancelled(error: DatabaseError) {
-                Log.e("UserClasses", "Error loading classes data: ${error.message}")
-            }
-        })
-    }
+                    // Update the adapter to reflect the user's joined classes
+                    classesAdapter.updateUserJoinedClasses(userJoinedClasses)
+                }
 
-    private val onJoinClick: (Int) -> Unit = { position ->
-        // Handle the join click for the class at the given position
-        val classId = classesAdapter.getItemId(position).toString() // Get the class ID using your adapter's logic
-
-        // Get the current user's ID
-        val user = FirebaseAuth.getInstance().currentUser
-        val userId = user?.uid
-
-        // Assuming you have a reference to the database
-        val userClassesRef = FirebaseDatabase.getInstance()
-            .getReference("Users/$userId/JoinedClasses")
-
-
-        // Set the value to true to indicate that the user has joined this class
-        userClassesRef.child(classId).setValue(true){ databaseError, _ ->
-            if (databaseError == null) {
-                // The join operation was successful
-                Log.d("JoinClassesActivity2", "Join operation successful")
-            } else {
-                // There was an error during the join operation
-                Log.e("JoinClassesActivity2", "Error during join operation: ${databaseError.message}")
-            }
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e("JoinClassesActivity", "Error checking user's joined classes: ${error.message}")
+                }
+            })
         }
     }
 
-    private val onLeaveClick: (Int) -> Unit = { position ->
-        // Handle the leave click for the class at the given position
-        val classId = classesAdapter.getItemId(position).toString() // Get the class ID using your adapter's logic
-
+    private val onJoinClick: (String) -> Unit = { classId ->
         // Get the current user's ID
-        val user = FirebaseAuth.getInstance().currentUser
-        val userId = user?.uid
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        if (userId != null) {
+            // Add the user to the class in Firebase
+            joinedClassesRef.child(userId).child(classId).setValue(true)
+                .addOnSuccessListener {
+                    // The join operation was successful
+                    Log.d("JoinClassesActivity", "Join operation successful")
+                }
+                .addOnFailureListener { exception ->
+                    // There was an error during the join operation
+                    Log.e("JoinClassesActivity", "Error during join operation: ${exception.message}")
+                }
+        }
+    }
 
-        // Assuming you have a reference to the database
-        val userClassesRef = FirebaseDatabase.getInstance()
-            .getReference("Users/$userId/JoinedClasses")
 
-        // Remove the class from the user's joined classes
-        userClassesRef.child(classId).removeValue()
+    private val onLeaveClick: (String) -> Unit = { classId ->
+        // Get the current user's ID
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        if (userId != null) {
+            // Remove the user from the class
+            joinedClassesRef.child(userId).child(classId).removeValue()
+                .addOnSuccessListener {
+                    // The leave operation was successful
+                    Log.d("JoinClassesActivity", "Leave operation successful")
+                }
+                .addOnFailureListener { exception ->
+                    // There was an error during the leave operation
+                    Log.e("JoinClassesActivity", "Error during leave operation: ${exception.message}")
+                }
+        }
     }
 
 
