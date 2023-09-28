@@ -72,6 +72,7 @@ class MainActivity : AppCompatActivity() {
         val imageButton: ImageButton = binding.logoutbutton
         val scanButton: ImageButton = binding.scanButton
         val payButton: Button = binding.payment
+        val joinClassBtn:Button=binding.JoinClassBtn
 
         userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
         storageReference = FirebaseStorage.getInstance().reference
@@ -119,6 +120,11 @@ class MainActivity : AppCompatActivity() {
 
         payButton.setOnClickListener {
             val i = Intent(this, PaymentActivity::class.java)
+            startActivity(i)
+        }
+
+        joinClassBtn.setOnClickListener {
+            val i = Intent(this, JoinClassesActivity::class.java)
             startActivity(i)
         }
 

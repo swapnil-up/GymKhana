@@ -13,12 +13,12 @@
         android:layout_height="wrap_content"
         android:text="Join Classes"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/notificationbtn5"
-        app:layout_constraintStart_toStartOf="@+id/notificationbtn5"
-        app:layout_constraintTop_toBottomOf="@+id/notificationbtn5" />
+        app:layout_constraintEnd_toEndOf="@+id/JoinClassBtn"
+        app:layout_constraintStart_toStartOf="@+id/JoinClassBtn"
+        app:layout_constraintTop_toBottomOf="@+id/JoinClassBtn" />
 
     <Button
-        android:id="@+id/notificationbtn5"
+        android:id="@+id/JoinClassBtn"
         android:layout_width="85dp"
         android:layout_height="85dp"
         android:layout_marginTop="16dp"
