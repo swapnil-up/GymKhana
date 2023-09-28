@@ -54,6 +54,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.345"
         app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/outline_for_photo_view"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/background2" />
 
@@ -75,8 +76,9 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:contentDescription="click for details"
+            android:background="@drawable/outline_for_photo_view"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/samrat" />
+            app:srcCompat="@drawable/adminlogo" />
     </androidx.cardview.widget.CardView>
 
     <ImageView

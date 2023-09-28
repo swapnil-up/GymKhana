@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.text.InputFilter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.gymkhana.databinding.ActivityUserDetailsBinding
@@ -22,10 +21,10 @@ class UserDetails : AppCompatActivity() {
     private lateinit var database: FirebaseDatabase
     private lateinit var userId: String
     private lateinit var storageReference: StorageReference
-    private lateinit var selectedImageUri: Uri
-
+    private var selectedImageUri: Uri? = null // Initialize as nullable
     companion object {
-        private const val PICK_IMAGE_REQUEST = 101
+        const val  PICK_IMAGE_REQUEST = 101
+        const val RESULT_CODE_PROFILE_UPDATED = 1 // Define a custom result code
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,13 +79,7 @@ class UserDetails : AppCompatActivity() {
 
         binding.saveButton.setOnClickListener {
             saveUserDetails()
-            val loginIntent = Intent(this, MainActivity::class.java)
-            startActivity(loginIntent)
-            finish()
         }
-        // Set input filters for age and number EditText fields
-        binding.phoneEditText.filters = arrayOf(InputFilter.LengthFilter(2))
-        binding.phoneEditText2.filters = arrayOf(InputFilter.LengthFilter(10))
     }
 
     private fun openImageChooser() {
@@ -102,6 +95,7 @@ class UserDetails : AppCompatActivity() {
             binding.userPhotoImageView.setImageURI(selectedImageUri)
         }
     }
+
 
     private fun saveUserDetails() {
         val firstName = binding.nameEditText.text.toString().trim()
@@ -119,8 +113,15 @@ class UserDetails : AppCompatActivity() {
 
             userReference.setValue(userDetails).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    Toast.makeText(this, "User details saved successfully", Toast.LENGTH_SHORT).show()
-                    uploadUserPhoto()
+                    // Check if a photo is selected to upload
+                    if (selectedImageUri != null) {
+                        // Successfully saved user details, now upload the photo
+                        uploadUserPhoto()
+                    } else {
+                        // No photo selected, just finish the UserDetails activity
+                        setResult(RESULT_CODE_PROFILE_UPDATED)
+                        finish()
+                    }
                 } else {
                     Toast.makeText(this, "Failed to save user details", Toast.LENGTH_SHORT).show()
                 }
@@ -130,23 +131,40 @@ class UserDetails : AppCompatActivity() {
         }
     }
 
-    private fun uploadUserPhoto() {
-        val imageRef = storageReference.child("user_photos").child(userId)
-        imageRef.putFile(selectedImageUri)
-            .addOnSuccessListener { taskSnapshot ->
-                Toast.makeText(this, "User photo uploaded successfully", Toast.LENGTH_SHORT).show()
 
-                // Save the photo URL to SharedPreferences
-                val sharedPreferences = getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
-                val editor = sharedPreferences.edit()
-                imageRef.downloadUrl.addOnSuccessListener { uri ->
-                    val photoUrl = uri.toString()
-                    editor.putString("userPhotoUrl", photoUrl)
-                    editor.apply()
+    private fun uploadUserPhoto() {
+        if (selectedImageUri != null) {
+            val imageRef = storageReference.child("user_photos").child(userId)
+            imageRef.putFile(selectedImageUri!!)
+                .addOnSuccessListener { taskSnapshot ->
+                    // Successfully uploaded user photo, now load the photo URL and save it
+                    imageRef.downloadUrl.addOnSuccessListener { uri ->
+                        val photoUrl = uri.toString()
+
+                        // Save the photo URL to SharedPreferences
+                        val sharedPreferences = getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
+                        val editor = sharedPreferences.edit()
+                        editor.putString("userPhotoUrl", photoUrl)
+                        editor.apply()
+
+                        // Set the result code to indicate that the user's profile has been updated
+                        setResult(RESULT_CODE_PROFILE_UPDATED)
+
+                        // Finish the UserDetails activity
+                        finish()
+                    }
+                        .addOnFailureListener { exception ->
+                            Toast.makeText(this, "Failed to get photo URL", Toast.LENGTH_SHORT).show()
+                        }
                 }
-            }
-            .addOnFailureListener { exception ->
-                Toast.makeText(this, "Failed to upload user photo", Toast.LENGTH_SHORT).show()
-            }
+                .addOnFailureListener { exception ->
+                    Toast.makeText(this, "Failed to upload user photo", Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            // Handle the case where no image was selected
+            Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show()
+        }
     }
+
+
 }
