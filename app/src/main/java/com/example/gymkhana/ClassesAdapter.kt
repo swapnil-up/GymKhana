@@ -1,5 +1,6 @@
 package com.example.gymkhana.classes
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +34,7 @@ class ClassesAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val gymClass = classesList[position]
+        val classId = gymClass.classId // Get the classId
         holder.classNameTextView.text = gymClass.className
         holder.classDescription.text = gymClass.classDesc
         Picasso.get()
@@ -40,9 +42,6 @@ class ClassesAdapter(
             .placeholder(R.drawable.notification)
             .error(R.drawable.bg_no_color)
             .into(holder.classImageView)
-
-        // Set click listeners for the "Join" and "Leave" buttons with class ID
-        val classId = gymClass.classId
 
         // Check if the user has already joined this class and update button visibility accordingly
         if (userJoinedClasses.contains(classId)) {
@@ -64,6 +63,10 @@ class ClassesAdapter(
             holder.btnJoin.visibility = View.VISIBLE
             holder.btnLeave.visibility = View.GONE
         }
+
+        for (gymClass in classesList) {
+            Log.d("GymClass", "Class ID: ${gymClass.classId}, Class Name: ${gymClass.className}")
+        }
     }
 
     override fun getItemCount(): Int {
@@ -81,5 +84,6 @@ class ClassesAdapter(
         this.userJoinedClasses = userJoinedClasses
         notifyDataSetChanged() // Notify the adapter that the data has changed
     }
+
 
 }

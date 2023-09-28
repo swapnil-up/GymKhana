@@ -43,8 +43,8 @@ class JoinClassesActivity : AppCompatActivity() {
                     for (classSnapshot in snapshot.children) {
                         val gymClass = classSnapshot.getValue(GymClass::class.java)
                         gymClass?.let {
-                            classesList.add(it)
-                        }
+                            it.classId = classSnapshot.key.toString() // Set the classId property
+                            classesList.add(it)                        }
                     }
 
                     // Update the RecyclerView adapter with the loaded data
