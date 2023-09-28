@@ -7,11 +7,33 @@
     android:background="@color/PastelBlue"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Join Classes"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/notificationbtn5"
+        app:layout_constraintStart_toStartOf="@+id/notificationbtn5"
+        app:layout_constraintTop_toBottomOf="@+id/notificationbtn5" />
+
+    <Button
+        android:id="@+id/notificationbtn5"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/podium"
+        app:layout_constraintEnd_toEndOf="@+id/mealPlan"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/mealPlan"
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        app:tint="@color/secondary" />
+
     <Button
         android:id="@+id/attendance"
         android:layout_width="85dp"
         android:layout_height="85dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="36dp"
         android:background="@drawable/calendar"
         android:backgroundTint="@null"
         android:contentDescription="click for details"
@@ -45,7 +67,7 @@
         android:id="@+id/Store"
         android:layout_width="85dp"
         android:layout_height="85dp"
-        android:layout_marginTop="84dp"
+        android:layout_marginTop="32dp"
         android:background="@drawable/shop"
         android:backgroundTint="@null"
         app:layout_constraintStart_toStartOf="@+id/userName"
@@ -132,7 +154,7 @@
         android:id="@+id/mealPlan"
         android:layout_width="85dp"
         android:layout_height="85dp"
-        android:layout_marginTop="84dp"
+        android:layout_marginTop="44dp"
         android:background="@drawable/mealplanner"
         app:layout_constraintEnd_toEndOf="@+id/attendance"
         app:layout_constraintHorizontal_bias="0.0"
@@ -149,8 +171,7 @@
         android:contentDescription="click for details"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="@+id/imageView10"
-        app:layout_constraintStart_toEndOf="@+id/scanButton"
-         />
+        app:layout_constraintStart_toEndOf="@+id/scanButton" />
 
     <TextView
         android:id="@+id/textView"
@@ -165,8 +186,8 @@
 
     <TextView
         android:id="@+id/textView3"
-        android:layout_width="86dp"
-        android:layout_height="78dp"
+        android:layout_width="110dp"
+        android:layout_height="54dp"
         android:text="Meal plan Generator"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/mealPlan"
@@ -190,9 +211,11 @@
         android:layout_height="wrap_content"
         android:text="Store"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/attendance"
         app:layout_constraintEnd_toEndOf="@+id/Store"
         app:layout_constraintStart_toStartOf="@+id/Store"
-        app:layout_constraintTop_toBottomOf="@+id/Store" />
+        app:layout_constraintTop_toBottomOf="@+id/Store"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/textView7"
