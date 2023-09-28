@@ -16,7 +16,6 @@ import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import com.bumptech.glide.Glide
 import android.app.Activity
-import android.app.Application
 import android.net.Uri
 import com.bumptech.glide.request.RequestOptions
 import com.example.gymkhana.databinding.ActivityMainBinding
@@ -31,17 +30,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var storageReference: StorageReference
     private lateinit var database: FirebaseDatabase
     private lateinit var binding: ActivityMainBinding
-    private lateinit var userId: String
-
-    companion object {
-        private const val USER_DETAILS_REQUEST_CODE = 1001 // Define a request code
-    }
-    class MyApplication : Application() {
-        override fun onCreate() {
-            super.onCreate()
-            FirebaseApp.initializeApp(this)
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,16 +59,20 @@ class MainActivity : AppCompatActivity() {
         val mealPlanButton: Button = binding.mealPlan
         val imageButton: ImageButton = binding.logoutbutton
         val scanButton: ImageButton = binding.scanButton
-        val payButton: Button = binding.payment
-        val joinClassBtn:Button=binding.JoinClassBtn
 
-        userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-        storageReference = FirebaseStorage.getInstance().reference
-
-        // Load the user's profile photo
-        loadUserProfilePhoto()
-
+        val userId = firebaseAuth.currentUser?.uid
         if (userId != null) {
+            val photoRef = storageReference.child("user_photos").child(userId)
+            photoRef.downloadUrl.addOnSuccessListener { uri ->
+                // Load user photo using Glide
+                Glide.with(this@MainActivity)
+                    .load(uri)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(imagebtn)
+            }.addOnFailureListener { exception ->
+                Toast.makeText(this@MainActivity, "Failed to load user photo", Toast.LENGTH_SHORT)
+                    .show()
+            }
             val userReference: DatabaseReference = database.reference.child("Users").child(userId)
             userReference.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -94,6 +86,14 @@ class MainActivity : AppCompatActivity() {
                             binding.userName.text = firstName
                             binding.lname.text = lastName
                         }
+                    }
+
+                    fun onCancelled(error: DatabaseError) {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Failed to retrieve user details",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
 
@@ -113,18 +113,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         imagebtn.setOnClickListener {
-            // Start UserDetails activity for result
             val i = Intent(this, UserDetails::class.java)
-            startActivityForResult(i, USER_DETAILS_REQUEST_CODE)
-        }
-
-        payButton.setOnClickListener {
-            val i = Intent(this, PaymentActivity::class.java)
-            startActivity(i)
-        }
-
-        joinClassBtn.setOnClickListener {
-            val i = Intent(this, JoinClassesActivity::class.java)
             startActivity(i)
         }
 
@@ -176,16 +165,8 @@ class MainActivity : AppCompatActivity() {
         integrator.setPrompt("Scan a QR Code")
         integrator.initiateScan()
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == USER_DETAILS_REQUEST_CODE) {
-            if (resultCode == UserDetails.RESULT_CODE_PROFILE_UPDATED) {
-                // User's profile has been updated, reload the user's profile photo
-                loadUserProfilePhoto()
-            }
-        }
 
         val result: IntentResult? = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null && result.contents != null) {
@@ -215,12 +196,6 @@ class MainActivity : AppCompatActivity() {
                         val newNotificationRef = userNotificationsRef.push()
                         newNotificationRef.child("title").setValue(currentDateTime)
                         newNotificationRef.child("message").setValue(scannedData)
-
-                        // Create a new notification entry in the "Notifications" node for all users
-                        val notificationsRef: DatabaseReference = database.reference.child("Notifications")
-                        val newAdminNotificationRef = notificationsRef.push()
-                        newAdminNotificationRef.child("title").setValue(currentDateTime)
-                        newAdminNotificationRef.child("message").setValue(scannedData)
                     }
                     .addOnFailureListener { exception ->
                         Toast.makeText(this, "Failed to store scanned data", Toast.LENGTH_SHORT).show()
@@ -231,6 +206,7 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Scan canceled or failed", Toast.LENGTH_LONG).show()
         }
     }
+
 
     private fun logout() {
         firebaseAuth.signOut()
@@ -245,20 +221,5 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()
-    }
-
-    private fun loadUserProfilePhoto() {
-        // Load the user's profile photo URL from SharedPreferences
-        val sharedPreferences = getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
-        val userPhotoUrl = sharedPreferences.getString("userPhotoUrl", null)
-
-        // Check if the user has a profile photo URL
-        if (userPhotoUrl != null) {
-            // Load the user's photo using Glide into imagebtn (user icon)
-            Glide.with(this@MainActivity)
-                .load(userPhotoUrl)
-                .apply(RequestOptions.circleCropTransform())
-                .into(binding.userIcon)
-        }
     }
 }
