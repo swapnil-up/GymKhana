@@ -25,6 +25,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         // Handle the new token (e.g., send it to your server)
         obtainAndSaveFCMToken()
+
         // You can also save the token locally for later use
         // Log the token to the console for testing purposes
         Log.d("FCM Token", token)
@@ -58,22 +59,16 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // Get a reference to the "FCM Tokens" node in the database
         val tokensRef = database.reference.child("FCM Tokens")
 
-        // Use push to generate a unique key for each token
-        val tokenKey = tokensRef.push().key
-
-        // Check if the key is not null (just to be safe)
-        if (tokenKey != null) {
-            // Set the FCM token as the value under the generated key
-            tokensRef.child(tokenKey).setValue(token)
-                .addOnSuccessListener {
-                    // Token successfully updated in the database
-                    Log.d("FCM_TOKEN", "Token updated in the database: $token")
-                }
-                .addOnFailureListener { e ->
-                    // Handle the error if the token update fails
-                    Log.e("FCM_TOKEN", "Error updating token in the database: $e")
-                }
-        }
+        // Set the FCM token as the value directly under the "FCM Tokens" node
+        tokensRef.setValue(token)
+            .addOnSuccessListener {
+                // Token successfully updated in the database
+                Log.d("FCM_TOKEN", "Token updated in the database: $token")
+            }
+            .addOnFailureListener { e ->
+                // Handle the error if the token update fails
+                Log.e("FCM_TOKEN", "Error updating token in the database: $e")
+            }
     }
 
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
