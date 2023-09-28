@@ -25,8 +25,8 @@
 
         <Button
             android:id="@+id/uploadPhotoButton"
-            android:layout_width="145dp"
-            android:layout_height="43dp"
+            android:layout_width="164dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="8dp"
             android:background="@drawable/buttoncolor"
@@ -59,7 +59,7 @@
         <EditText
             android:id="@+id/emailEditText"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
+            android:layout_height="54dp"
             android:background="@drawable/rectangle_user_details"
             android:hint="enter Last Name"
 
@@ -76,7 +76,7 @@
         <EditText
             android:id="@+id/phoneEditText"
             android:layout_width="match_parent"
-            android:layout_height="51dp"
+            android:layout_height="54dp"
             android:background="@drawable/rectangle_user_details"
             android:hint="enter age"
             android:inputType="numberDecimal" />
